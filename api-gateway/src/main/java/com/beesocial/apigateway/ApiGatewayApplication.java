@@ -36,9 +36,10 @@ public class ApiGatewayApplication {
 	private String getServiceUri(DiscoveryClient discoveryClient, String serviceName) {
 		List<ServiceInstance> instances = discoveryClient.getInstances(serviceName);
 		if (instances != null && !instances.isEmpty()) {
-			return instances.get(0).getUri().toString();
+			return instances.getFirst().getUri().toString();
 		}
-		throw new RuntimeException("No instances available for service: " + serviceName);
+		return "http://localhost:8080/error";
+
 	}
 
 }

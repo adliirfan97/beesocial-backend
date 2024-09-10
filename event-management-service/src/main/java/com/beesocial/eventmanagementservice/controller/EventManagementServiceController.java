@@ -23,10 +23,12 @@ public class EventManagementServiceController {
         return "Test from Event Management Service";
     }
 
+    // Example of communications from other microservices
     @GetMapping("/testUserFromEvent")
     public String testUserFromEvent() {
         List<ServiceInstance> instances = discoveryClient.getInstances("user-management-service");
-        if (instances != null && instances.isEmpty()) {
+        System.out.println(instances);
+        if (instances != null && !instances.isEmpty()) {
             ServiceInstance serviceInstance = instances.getFirst();
             String uri = serviceInstance.getUri().toString() + "/test";
             System.out.println("Service URI: " + uri); // Log for debugging
@@ -36,7 +38,8 @@ public class EventManagementServiceController {
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
+        } else {
+            return "Service instance not found";
         }
-        return "Service instance not found";
     }
 }
