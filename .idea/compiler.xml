@@ -9,6 +9,7 @@
         <module name="api-gateway" />
         <module name="event-management-service" />
         <module name="eureka-server" />
+        <module name="authentication-server" />
         <module name="user-management-service" />
       </profile>
     </annotationProcessing>
@@ -16,6 +17,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-gateway" options="-parameters" />
+      <module name="authentication-server" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="event-management-service" options="-parameters" />
       <module name="user-management-service" options="-parameters" />
