@@ -25,10 +25,10 @@ public class ApiGatewayApplication {
 						.path("/user-management-service/**")
 						.filters(f -> f.stripPrefix(1))
 						.uri(getServiceUri(discoveryClient, "user-management-service")))
-//				.route("user-management-service", r -> r
-//						.path("/user-management-service/**")
-//						.filters(f -> f.stripPrefix(1))
-//						.uri(getServiceUri(discoveryClient, "user-management-service")))
+				.route("event-management-service", r -> r
+						.path("/event-management-service/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri(getServiceUri(discoveryClient, "event-management-service")))
 				.build();
 	}
 
