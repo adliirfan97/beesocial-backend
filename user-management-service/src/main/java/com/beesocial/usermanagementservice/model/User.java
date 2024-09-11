@@ -20,13 +20,13 @@ public class User {
     private String profilePhoto;
     private ROLE role;
 
-    public User(String firstName, String lastName, String email, String phoneNumber, String password, int role, String profilePhoto) {
+    public User(String firstName, String lastName, String email, String phoneNumber, String password, String profilePhoto, ROLE role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.role = role;
         this.profilePhoto = profilePhoto;
+        this.role = role;
     }
 }
