@@ -1,21 +1,25 @@
 package com.beesocial.eventmanagementservice.controller;
 
+import com.beesocial.eventmanagementservice.service.EventService;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class EventManagementServiceController {
     private final EurekaDiscoveryClient discoveryClient;
     private final WebClient webClient;
+    private final EventService eventService;
 
-    public EventManagementServiceController(EurekaDiscoveryClient discoveryClient, WebClient webClient) {
+    public EventManagementServiceController(EurekaDiscoveryClient discoveryClient, WebClient webClient, EventService eventService) {
         this.discoveryClient = discoveryClient;
         this.webClient = webClient;
+        this.eventService = eventService;
     }
 
     @GetMapping("/testEvent")
@@ -41,5 +45,10 @@ public class EventManagementServiceController {
         } else {
             return "Service instance not found";
         }
+    }
+
+    @PostMapping("/event")
+    public ResponseEntity<Object> saveEvent(@RequestParam int userId, @RequestParam String text, @RequestParam String image){
+        return eventService.saveEvent(userId, text, image);
     }
 }
