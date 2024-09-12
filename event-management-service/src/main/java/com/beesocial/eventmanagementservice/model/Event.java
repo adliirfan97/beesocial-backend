@@ -3,6 +3,8 @@ package com.beesocial.eventmanagementservice.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class Event {
@@ -10,11 +12,10 @@ public class Event {
     private int userId;
     private String text;
     private String image;
+    private LocalDateTime timestamp;
 
-    public Event(int eventId, int userId, String text, String image) {
-        this.eventId = eventId;
+    public Event(int userId, LocalDateTime timestamp) {
         this.userId = userId;
-        this.text = text;
-        this.image = image;
+        this.timestamp = timestamp;
     }
 }
