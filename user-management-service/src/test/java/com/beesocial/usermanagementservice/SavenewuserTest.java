@@ -4,7 +4,8 @@ import com.beesocial.usermanagementservice.controller.UserManagementServiceContr
 import com.beesocial.usermanagementservice.model.ROLE;
 import com.beesocial.usermanagementservice.model.User;
 import com.beesocial.usermanagementservice.service.UserService;
-import org.junit.Before;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,14 +15,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
-public class SavenewuserTest {
+class SavenewuserTest {
     @Mock
     private UserService userService;
 
     @InjectMocks
     private UserManagementServiceController controller;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this); // Initializes mocks
         ReflectionTestUtils.setField(controller, "userService", userService); // Inject userService mock into controller
@@ -35,8 +36,8 @@ public class SavenewuserTest {
 
         User result = controller.saveNewUser(validUser);
 
-        assertNotNull(result);
-        assertEquals(validUser.getEmail(), result.getEmail());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(validUser.getEmail(), result.getEmail());
         verify(userService, times(1)).saveUser(validUser);
     }
 
@@ -50,7 +51,7 @@ public class SavenewuserTest {
             controller.saveNewUser(invalidUser);
         });
 
-        assertEquals("Missing required fields", exception.getMessage());
+        Assertions.assertEquals("Missing required fields", exception.getMessage());
         verify(userService, times(1)).saveUser(invalidUser);
     }
 
@@ -62,14 +63,14 @@ public class SavenewuserTest {
 
         User result = controller.saveNewUser(validUser);
 
-        assertNotNull(result);
-        assertEquals("John", result.getFirstName());
-        assertEquals("Doe", result.getLastName());
-        assertEquals("johndoe@example.com", result.getEmail());
-        assertEquals("123456789", result.getPhoneNumber());
-        assertEquals("password123", result.getPassword());
-        assertEquals("profile.jpg", result.getProfilePhoto());
-        assertEquals(ROLE.EMPLOYEE, result.getRole());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("John", result.getFirstName());
+        Assertions.assertEquals("Doe", result.getLastName());
+        Assertions.assertEquals("johndoe@example.com", result.getEmail());
+        Assertions.assertEquals("123456789", result.getPhoneNumber());
+        Assertions.assertEquals("password123", result.getPassword());
+        Assertions.assertEquals("profile.jpg", result.getProfilePhoto());
+        Assertions.assertEquals(ROLE.EMPLOYEE, result.getRole());
 
         verify(userService, times(1)).saveUser(validUser);
     }
@@ -82,14 +83,14 @@ public class SavenewuserTest {
 
         User result = controller.saveNewUser(validUser);
 
-        assertNotNull(result);
-        assertEquals("Jane", result.getFirstName());
-        assertEquals("Smith", result.getLastName());
-        assertEquals("janesmith@example.com", result.getEmail());
-        assertEquals("987654321", result.getPhoneNumber());
-        assertEquals("pass123", result.getPassword());
-        assertEquals("image.jpg", result.getProfilePhoto());
-        assertEquals(ROLE.HR, result.getRole());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals("Jane", result.getFirstName());
+        Assertions.assertEquals("Smith", result.getLastName());
+        Assertions.assertEquals("janesmith@example.com", result.getEmail());
+        Assertions.assertEquals("987654321", result.getPhoneNumber());
+        Assertions.assertEquals("pass123", result.getPassword());
+        Assertions.assertEquals("image.jpg", result.getProfilePhoto());
+        Assertions.assertEquals(ROLE.HR, result.getRole());
 
         verify(userService, times(1)).saveUser(validUser);
     }
