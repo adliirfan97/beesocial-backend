@@ -1,5 +1,6 @@
 package com.beesocial.eventmanagementservice.controller;
 
+import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.service.EventService;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
@@ -48,7 +49,7 @@ public class EventManagementServiceController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<Object> saveEvent(@RequestParam int userId, @RequestParam String text, @RequestParam String image){
-        return eventService.saveEvent(userId, text, image);
+    public ResponseEntity<Object> saveEvent(@RequestBody Event event){
+        return eventService.saveEvent(event);
     }
 }

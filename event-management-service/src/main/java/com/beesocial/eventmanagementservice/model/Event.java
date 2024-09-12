@@ -13,9 +13,10 @@ public class Event {
     private String text;
     private String image;
     private LocalDateTime timestamp;
+    private boolean isEdited;
 
-    public Event(int userId, LocalDateTime timestamp) {
+    public Event(int userId) {
         this.userId = userId;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
     }
 }
