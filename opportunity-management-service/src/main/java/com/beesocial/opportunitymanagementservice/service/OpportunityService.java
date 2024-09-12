@@ -1,4 +1,4 @@
-package com.beesocial.opportumitymanagementservice.service;
+package com.beesocial.opportunitymanagementservice.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,13 +1,13 @@
-package com.beesocial.opportumitymanagementservice;
+package com.beesocial.opportunitymanagementservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OpportumityManagementServiceApplication {
+public class OpportunityManagementServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(OpportumityManagementServiceApplication.class, args);
+		SpringApplication.run(OpportunityManagementServiceApplication.class, args);
 	}
 
 }

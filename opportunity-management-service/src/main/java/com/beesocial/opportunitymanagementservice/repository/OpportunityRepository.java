@@ -1,6 +1,6 @@
-package com.beesocial.opportumitymanagementservice.repository;
+package com.beesocial.opportunitymanagementservice.repository;
 
-import com.beesocial.opportumitymanagementservice.model.Opportunity;
+import com.beesocial.opportunitymanagementservice.model.Opportunity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

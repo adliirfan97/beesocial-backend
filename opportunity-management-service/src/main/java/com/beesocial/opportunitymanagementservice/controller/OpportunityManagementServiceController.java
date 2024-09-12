@@ -1,8 +1,11 @@
-package com.beesocial.opportumitymanagementservice.controller;
+package com.beesocial.opportunitymanagementservice.controller;
 
-import com.beesocial.opportumitymanagementservice.service.OpportunityService;
+import com.beesocial.opportunitymanagementservice.dto.OpportunityRequest;
+import com.beesocial.opportunitymanagementservice.service.OpportunityService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,5 +27,18 @@ public class OpportunityManagementServiceController {
     public String test() {
         return "Test from Event Management Service";
     }
+
+    @PostMapping()
+    public ResponseEntity<String>createOpportunity(@RequestBody @Valid OpportunityRequest opportunityRequest) {
+        //TODO: Add a new Opportunity to Database
+        return null;
+    }
+
+    @PutMapping()
+    public ResponseEntity<Void> updateOpportunity(@RequestBody @Valid OpportunityRequest opportunityRequest) {
+        //TODO: Edit Opportunity to Database
+        return null;
+    }
+
 
 }

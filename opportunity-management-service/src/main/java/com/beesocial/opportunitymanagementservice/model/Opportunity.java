@@ -1,4 +1,4 @@
-package com.beesocial.opportumitymanagementservice.model;
+package com.beesocial.opportunitymanagementservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;

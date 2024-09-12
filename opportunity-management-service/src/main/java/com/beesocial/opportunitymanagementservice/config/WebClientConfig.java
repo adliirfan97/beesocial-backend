@@ -1,4 +1,4 @@
-package com.beesocial.opportumitymanagementservice.config;
+package com.beesocial.opportunitymanagementservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
