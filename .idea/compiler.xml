@@ -2,16 +2,18 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="api-gateway" />
         <module name="event-management-service" />
-        <module name="content-management-service" />
-        <module name="eureka-server" />
+        <module name="opportumity-management-service" />
         <module name="authentication-server" />
         <module name="user-management-service" />
+        <module name="api-gateway" />
+        <module name="content-management-service" />
+        <module name="eureka-server" />
       </profile>
     </annotationProcessing>
   </component>
@@ -22,6 +24,7 @@
       <module name="content-management-service" options="-parameters" />
       <module name="eureka-server" options="-parameters" />
       <module name="event-management-service" options="-parameters" />
+      <module name="opportumity-management-service" options="-parameters" />
       <module name="user-management-service" options="-parameters" />
     </option>
   </component>

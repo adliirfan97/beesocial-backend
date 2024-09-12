@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/event-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/authentication-server/pom.xml" />
         <option value="$PROJECT_DIR$/content-management-service/pom.xml" />
+        <option value="$PROJECT_DIR$/opportumity-management-service/pom.xml" />
       </list>
     </option>
   </component>
