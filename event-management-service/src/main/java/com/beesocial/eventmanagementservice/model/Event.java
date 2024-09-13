@@ -1,5 +1,6 @@
 package com.beesocial.eventmanagementservice.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,8 +16,13 @@ public class Event {
     private LocalDateTime timestamp;
     private boolean isEdited;
 
-    public Event(int userId) {
+    @Builder
+    public Event(int eventId, int userId, String text, String image, LocalDateTime timestamp, boolean isEdited) {
+        this.eventId = eventId;
         this.userId = userId;
+        this.text = text;
+        this.image = image;
         this.timestamp = LocalDateTime.now();
+        this.isEdited = false;
     }
 }

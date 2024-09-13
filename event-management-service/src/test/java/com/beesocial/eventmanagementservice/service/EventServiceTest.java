@@ -12,21 +12,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class EventServiceTest {
     @Test
     public void testEvent_checkTime(){
-        Event eventReturn = new Event(1);
+        Event eventReturn = Event.builder()
+                .userId(1)
+                .build();
 
         assertEquals(LocalDateTime.now(), eventReturn.getTimestamp());
     }
     @Test
+    public void testEvent_checkUserId(){
+        EventService eventService = new EventService();
+        Event eventReturn = Event.builder()
+                .build();
+
+        assertEquals(ResponseEntity.badRequest().body("no host for event").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
+    }
+
+    @Test
     public void testSaveEvent_imageAndText(){
         EventService eventService = new EventService();
 
-        Event eventExpected = new Event(1);
-        eventExpected.setText("event post text");
-        eventExpected.setImage("image.png");
+        Event eventExpected = Event.builder()
+                .userId(1)
+                .text("event post text")
+                .image("image.png")
+                .build();
 
-        Event eventReturn = new Event(1);
-        eventReturn.setText("event post text");
-        eventReturn.setImage("image.png");
+        Event eventReturn = Event.builder()
+                .userId(1)
+                .text("event post text")
+                .image("image.png")
+                .build();
 
         assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
     }
@@ -34,11 +49,15 @@ public class EventServiceTest {
     public void testSaveEvent_imageOnly(){
         EventService eventService = new EventService();
 
-        Event eventReturn = new Event(1);
-        eventReturn.setImage("image.png");
+        Event eventReturn = Event.builder()
+                .userId(1)
+                .image("image.png")
+                .build();
 
-        Event eventExpected = new Event(1);
-        eventExpected.setImage("image.png");
+        Event eventExpected = Event.builder()
+                .userId(1)
+                .image("image.png")
+                .build();
 
         assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
     }
@@ -46,12 +65,15 @@ public class EventServiceTest {
     public void testSaveEvent_textOnly(){
         EventService eventService = new EventService();
 
-        Event eventReturn = new Event(1);
-        eventReturn.setText("event post text");
+        Event eventReturn = Event.builder()
+                .userId(1)
+                .text("event post text")
+                .build();
 
-        Event eventExpected = new Event(1);
-        eventExpected.setText("event post text");
-
+        Event eventExpected = Event.builder()
+                .userId(1)
+                .text("event post text")
+                .build();
 
         assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
     }
@@ -59,7 +81,9 @@ public class EventServiceTest {
     public void testSaveEvent_nullTextAndNullImage(){
         EventService eventService = new EventService();
 
-        Event eventReturn = new Event(1);
+        Event eventReturn = Event.builder()
+                .userId(1)
+                .build();
 
         assertEquals(ResponseEntity.badRequest().body("no text and no image").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
@@ -67,9 +91,10 @@ public class EventServiceTest {
     public void testSaveEvent_emptyTextAndEmptyImage(){
         EventService eventService = new EventService();
 
-        Event eventReturn = new Event(1);
-        eventReturn.setImage("");
-        eventReturn.setText("");
+        Event eventReturn = Event.builder()
+                .text("")
+                .image("")
+                .build();
 
         assertEquals(ResponseEntity.badRequest().body("no text and no image").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
@@ -82,8 +107,9 @@ public class EventServiceTest {
                 "Lorem ipsum odor amet, consectetuer adipiscing elit. Maximus vestibulum donec faucibus aptent sed phasellus. Dictum nisl ad volutpat habitasse massa eleifend malesuada. Sit conubia massa imperdiet eget cursus felis diam vivamus. Facilisi pulvinar egestas consequat enim consectetur cras nulla. Eleifend quis nam quisque ultricies morbi sociosqu natoque vel laoreet. Commodo netus imperdiet consectetur porttitor nascetur tortor aliquam. Taciti consequat sodales ad quam gravida sem." +
                 "Lorem ipsum odor amet, consectetuer adipiscing elit. Maximus vestibulum donec faucibus aptent sed phasellus. Dictum nisl ad volutpat habitasse massa eleifend malesuada. Sit conubia massa imperdiet eget cursus felis diam vivamus. Facilisi pulvinar egestas consequat enim consectetur cras nulla. Eleifend quis nam quisque ultricies morbi sociosqu natoque vel laoreet. Commodo netus imperdiet consectetur porttitor nascetur tortor aliquam. Taciti consequat sodales ad quam gravida sem.";
 
-        Event eventReturn = new Event(1);
-        eventReturn.setText(text);
+        Event eventReturn = Event.builder()
+                .text(text)
+                .build();
 
         assertEquals(ResponseEntity.badRequest().body("no text and no image").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
