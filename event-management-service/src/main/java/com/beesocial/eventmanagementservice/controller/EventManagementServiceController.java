@@ -6,6 +6,10 @@ import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
@@ -32,7 +36,6 @@ public class EventManagementServiceController {
     @GetMapping("/testUserFromEvent")
     public String testUserFromEvent() {
         List<ServiceInstance> instances = discoveryClient.getInstances("user-management-service");
-        System.out.println(instances);
         if (instances != null && !instances.isEmpty()) {
             ServiceInstance serviceInstance = instances.getFirst();
             String uri = serviceInstance.getUri().toString() + "/test";
@@ -49,7 +52,25 @@ public class EventManagementServiceController {
     }
 
     @PostMapping("/event")
-    public ResponseEntity<Object> saveEvent(@RequestBody Event event){
+    public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
         return eventService.saveEvent(event);
+    }
+
+    @GetMapping("/getUser")
+    public String getUser(@RequestParam String email) {
+        List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
+        if (instances != null && !instances.isEmpty()) {
+            ServiceInstance serviceInstance = instances.getFirst();
+            String uri = serviceInstance.getUri().toString() + "/api/firebase/user/" + email;
+            System.out.println("Service URI: " + uri); // Log for debugging
+
+            return webClient.get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        } else {
+            return "Service instance not found";
+        }
     }
 }

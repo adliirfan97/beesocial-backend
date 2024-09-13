@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="api-gateway" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <module name="api-gateway" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.beesocial.apigateway.ApiGatewayApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
