@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Bee Social" type="CompoundRunConfigurationType">
+    <toRun name="api-gateway" type="SpringBootApplicationConfigurationType" />
+    <toRun name="authentication-server" type="SpringBootApplicationConfigurationType" />
+    <toRun name="content-management-service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="eureka-server" type="SpringBootApplicationConfigurationType" />
+    <toRun name="event-management-service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="firebase-storage-service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="opportunity-management-service" type="SpringBootApplicationConfigurationType" />
+    <toRun name="user-management-service" type="SpringBootApplicationConfigurationType" />
+    <method v="2" />
+  </configuration>
+</component>
