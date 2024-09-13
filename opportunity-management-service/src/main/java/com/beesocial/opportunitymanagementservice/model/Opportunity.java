@@ -14,13 +14,13 @@ public class Opportunity {
     private int userId;
     private String text;
     private String image;
-    private long timestamp;
+    private long timeStamp;
 
     public Opportunity(int opportunityId, int userId, String text, String image, long timestamp) {
         this.opportunityId = opportunityId;
         this.userId = userId;
         this.text = text;
         this.image = image;
-        this.timestamp = timestamp;
+        this.timeStamp = timestamp;
     }
 }
