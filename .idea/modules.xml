@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/BeeSocial.iml" filepath="$PROJECT_DIR$/.idea/BeeSocial.iml" />
+      <module fileurl="file://$PROJECT_DIR$/firebase-storage-service/firebase-storage-service.iml" filepath="$PROJECT_DIR$/firebase-storage-service/firebase-storage-service.iml" />
     </modules>
   </component>
 </project>
