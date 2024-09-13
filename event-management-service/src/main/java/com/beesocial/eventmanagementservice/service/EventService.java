@@ -10,6 +10,9 @@ public class EventService {
     public ResponseEntity<Object> saveEvent(Event event){
         String text = event.getText();
         String image = event.getImage();
+        if(event.getUserId() == 0){
+            return ResponseEntity.badRequest().body("no host for event");
+        }
         if((text == null || text.isEmpty()) && (image == null || image.isEmpty())){
             return ResponseEntity.badRequest().body("no text and no image");
         }
