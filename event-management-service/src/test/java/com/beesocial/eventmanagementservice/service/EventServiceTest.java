@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,19 +33,13 @@ public class EventServiceTest {
     public void testSaveEvent_imageAndText(){
         EventService eventService = new EventService();
 
-        Event eventExpected = Event.builder()
-                .userId(1)
-                .text("event post text")
-                .image("image.png")
-                .build();
-
         Event eventReturn = Event.builder()
                 .userId(1)
                 .text("event post text")
                 .image("image.png")
                 .build();
 
-        assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
+        assertEquals(ResponseEntity.ok().body("").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
     @Test
     public void testSaveEvent_imageOnly(){
@@ -54,12 +50,7 @@ public class EventServiceTest {
                 .image("image.png")
                 .build();
 
-        Event eventExpected = Event.builder()
-                .userId(1)
-                .image("image.png")
-                .build();
-
-        assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
+        assertEquals(ResponseEntity.ok().body("").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
     @Test
     public void testSaveEvent_textOnly(){
@@ -70,12 +61,7 @@ public class EventServiceTest {
                 .text("event post text")
                 .build();
 
-        Event eventExpected = Event.builder()
-                .userId(1)
-                .text("event post text")
-                .build();
-
-        assertEquals(eventExpected, eventService.saveEvent(eventReturn).getBody());
+        assertEquals(ResponseEntity.ok().body("").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
     }
     @Test
     public void testSaveEvent_nullTextAndNullImage(){

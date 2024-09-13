@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
+@RequestMapping("/api/event")
 public class EventManagementServiceController {
     private final EurekaDiscoveryClient discoveryClient;
     private final WebClient webClient;
@@ -51,9 +51,23 @@ public class EventManagementServiceController {
         }
     }
 
-    @PostMapping("/event")
-    public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
-        return eventService.saveEvent(event);
+    @PostMapping("/events")
+    public String saveEvent(@RequestBody Event event) {
+        List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
+        if(instances != null && !instances.isEmpty()){
+            ServiceInstance serviceInstance = instances.getFirst();
+            String uri = serviceInstance.getUri().toString() + "/api/firebase/events";
+            System.out.println("Service URI: "+uri);
+
+            return webClient.post()
+                    .uri(uri)
+                    .bodyValue(eventService.saveEvent(event))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+        }else{
+            return "Service instance not found";
+        }
     }
 
     @GetMapping("/getUser")

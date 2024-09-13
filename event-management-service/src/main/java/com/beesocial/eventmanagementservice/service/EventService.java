@@ -3,11 +3,15 @@ package com.beesocial.eventmanagementservice.service;
 import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.model.EventApplicant;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
+@Service
 public class EventService {
-    public ResponseEntity<Object> saveEvent(Event event){
+        public ResponseEntity<Object> saveEvent(Event event){
         String text = event.getText();
         String image = event.getImage();
         if(event.getUserId() == 0){
@@ -23,8 +27,16 @@ public class EventService {
             event.setText(text);
         }
 
+        Map<String, Object> eventMap = new HashMap<>();
+        eventMap.put("eventId", event.getEventId());
+        eventMap.put("userId", event.getUserId());
+        eventMap.put("text", event.getText());
+        eventMap.put("image", event.getImage());
+        eventMap.put("timestamp", event.getTimestamp());
+        eventMap.put("isEdited", event.isEdited());
+
         // ADD: save event to database
-        return ResponseEntity.ok(event);
+        return ResponseEntity.ok(eventMap);
     }
     public ResponseEntity<Object> addApplicantById(int eventId, int userId){
         // ADD: validation checks the existence of eventId and userId
