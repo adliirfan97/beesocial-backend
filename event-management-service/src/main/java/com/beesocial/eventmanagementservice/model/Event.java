@@ -9,20 +9,16 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class Event {
-    private int eventId;
-    private int userId;
+    private String userId;
     private String text;
     private String image;
-    private LocalDateTime timestamp;
-    private boolean isEdited;
+    private LocalDateTime timestamp = LocalDateTime.now();
+    private boolean isEdited = false;
 
     @Builder
-    public Event(int eventId, int userId, String text, String image, LocalDateTime timestamp, boolean isEdited) {
-        this.eventId = eventId;
+    public Event(String userId, String text, String image) {
         this.userId = userId;
         this.text = text;
         this.image = image;
-        this.timestamp = LocalDateTime.now();
-        this.isEdited = false;
     }
 }

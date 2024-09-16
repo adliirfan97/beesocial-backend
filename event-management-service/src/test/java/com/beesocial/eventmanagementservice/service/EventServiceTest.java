@@ -15,7 +15,7 @@ public class EventServiceTest {
     @Test
     public void testEvent_checkTime(){
         Event eventReturn = Event.builder()
-                .userId(1)
+                .userId("abc123")
                 .build();
 
         assertEquals(LocalDateTime.now(), eventReturn.getTimestamp());
@@ -34,7 +34,7 @@ public class EventServiceTest {
         EventService eventService = new EventService();
 
         Event eventReturn = Event.builder()
-                .userId(1)
+                .userId("abc123")
                 .text("event post text")
                 .image("image.png")
                 .build();
@@ -46,7 +46,7 @@ public class EventServiceTest {
         EventService eventService = new EventService();
 
         Event eventReturn = Event.builder()
-                .userId(1)
+                .userId("abc123")
                 .image("image.png")
                 .build();
 
@@ -57,7 +57,7 @@ public class EventServiceTest {
         EventService eventService = new EventService();
 
         Event eventReturn = Event.builder()
-                .userId(1)
+                .userId("abc123")
                 .text("event post text")
                 .build();
 
@@ -68,7 +68,7 @@ public class EventServiceTest {
         EventService eventService = new EventService();
 
         Event eventReturn = Event.builder()
-                .userId(1)
+                .userId("abc123")
                 .build();
 
         assertEquals(ResponseEntity.badRequest().body("no text and no image").getStatusCode(), eventService.saveEvent(eventReturn).getStatusCode());
