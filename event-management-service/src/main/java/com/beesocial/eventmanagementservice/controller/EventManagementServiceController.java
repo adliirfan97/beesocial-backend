@@ -59,13 +59,37 @@ public class EventManagementServiceController {
             String uri = serviceInstance.getUri().toString() + "/api/firebase/events";
             System.out.println("Service URI: "+uri);
 
-            if(eventService.saveEvent(event).getStatusCode() == ResponseEntity.badRequest().body("no text and no image").getStatusCode()){
+            if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
                 return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
             }
 
             String response = webClient.post()
                     .uri(uri)
                     .bodyValue(eventService.saveEvent(event))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+            return ResponseEntity.ok(response);
+        }else{
+            return ResponseEntity.badRequest().body("Service instance not found");
+        }
+    }
+
+    @PutMapping("/{documentId}")
+    public ResponseEntity<Object> editEvent(@PathVariable String documentId, @RequestBody Event event) {
+        List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
+        if(instances != null && !instances.isEmpty()){
+            ServiceInstance serviceInstance = instances.getFirst();
+            String uri = serviceInstance.getUri().toString() + "/api/firebase/events/"+documentId;
+            System.out.println("Service URI: "+uri);
+
+            if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
+                return ResponseEntity.badRequest().body(eventService.editEvent(event).getBody());
+            }
+
+            String response = webClient.put()
+                    .uri(uri)
+                    .bodyValue(eventService.editEvent(event))
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();

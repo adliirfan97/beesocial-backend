@@ -37,7 +37,7 @@ public class EventService {
         // ADD: save event to database
         return ResponseEntity.ok(eventMap);
     }
-    public ResponseEntity<Object> addApplicantById(int eventId, int userId){
+    public ResponseEntity<Object> addApplicantById(String eventId, String userId){
         // ADD: validation checks the existence of eventId and userId
         // ADD: validation checks if the user has already applied to the event
 
@@ -45,12 +45,30 @@ public class EventService {
 
         return ResponseEntity.ok(eventApplicant);
     }
-    public ResponseEntity<Object> editEventById(int eventId, Event updatedEvent){
-        // ADD: find eventById
+    public ResponseEntity<Object> editEvent(Event event){
+        String text = event.getText();
+        String image = event.getImage();
+        if(event.getUserId() == null || event.getUserId().isEmpty()){
+            return ResponseEntity.badRequest().body("no host for event");
+        }
+        if((text == null || text.isEmpty()) && (image == null || image.isEmpty())){
+            return ResponseEntity.badRequest().body("no text and no image");
+        }
+        if(!(text==null||text.isEmpty())){
+            if(text.length()>=2000){
+                return ResponseEntity.badRequest().body("text too long");
+            }
+            event.setText(text);
+        }
 
-        // ADD: set the new updates
+        Map<String, Object> eventMap = new HashMap<>();
+        eventMap.put("userId", event.getUserId());
+        eventMap.put("text", event.getText());
+        eventMap.put("image", event.getImage());
+        eventMap.put("timestamp", event.getTimestamp());
+        eventMap.put("isEdited", true);
 
-        // ADD: save updated event
-        return ResponseEntity.ok("updatedEvent");
+        // ADD: save event to database
+        return ResponseEntity.ok(eventMap);
     }
 }
