@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -50,6 +51,17 @@ public class FirebaseController {
             @PathVariable String documentId) throws ExecutionException, InterruptedException {
         firestoreService.deleteData(collectionName, documentId);
         return ResponseEntity.ok("Data deleted from " + collectionName);
+    }
+
+    // Generate signed URL
+    @PostMapping("/generate-upload-url")
+    public ResponseEntity<Map<String, Object>> generateUploadUrl(@RequestParam String fileName, @RequestParam String contentType) {
+        URL signedUrl = cloudStorageService.generateUploadSignedUrl(fileName, contentType);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("signedUrl", signedUrl.toString());
+        response.put("fileName", fileName);
+        return ResponseEntity.ok(response);
     }
 
     // Cloud Storage: Upload a file
