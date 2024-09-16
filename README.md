@@ -36,9 +36,9 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer
 public class EurekaServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EurekaServerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EurekaServerApplication.class, args);
+    }
 
 }
 ```
@@ -128,23 +128,23 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class ApiGatewayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ApiGatewayApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ApiGatewayApplication.class, args);
+    }
 
-	@Bean
-	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
-		return builder.routes()
-				.route("user-management-service", r -> r
-						.path("/user-management-service/**")
-						.filters(f -> f.stripPrefix(1))
-						.uri("lb://user-management-service"))
-				.route("event-management-service", r -> r
-						.path("/event-management-service/**")
-						.filters(f -> f.stripPrefix(1))
-						.uri("lb://event-management-service"))
-				.build();
-	}
+    @Bean
+    public RouteLocator customRoutes(RouteLocatorBuilder builder) {
+        return builder.routes()
+                .route("user-management-service", r -> r
+                        .path("/user-management-service/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://user-management-service"))
+                .route("event-management-service", r -> r
+                        .path("/event-management-service/**")
+                        .filters(f -> f.stripPrefix(1))
+                        .uri("lb://event-management-service"))
+                .build();
+    }
 }
 
 ```
@@ -154,3 +154,95 @@ public class ApiGatewayApplication {
 1. **Automatic Load Balancing**: The `lb://` prefix enables Spring Cloud Gateway to perform client-side load balancing automatically, using Eureka for service instance discovery.
 2. **Cleaner Code**: There's no need to manually call `DiscoveryClient` to fetch service URIs. Spring Cloud Gateway and Eureka handle service discovery behind the scenes.
 3. **Improved Resilience**: The `lb://` prefix is tailored for dynamic microservices environments, where services can scale up or down and instances may fluctuate.
+
+# Feign Client
+
+## **Ensure Eureka is Set Up**:
+
+- All services that you want Feign to discover must be registered with a **Eureka Server**.
+- The `spring-cloud-starter-netflix-eureka-client` dependency must be included in all services that need to register themselves with Eureka.
+
+**Eureka Service Registration**: Your microservices (including the one you are calling via Feign) must be registered with **Eureka**. They do this by communicating with the Eureka Server and registering themselves under a specific service name (e.g., `firebase-storage-service`).
+
+## **Enable Discovery in Your Feign Client Service:**
+
+In the application where you're using Feign, ensure that **Eureka Discovery** is enabled by adding `@EnableFeignClients` to your Spring Boot main application class:
+
+```java
+package com.beesocial.usermanagementservice;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+
+@SpringBootApplication
+@EnableFeignClients
+public class UserManagementServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(UserManagementServiceApplication.class, args);
+	}
+
+}
+```
+
+## Create the Feign Client Interface
+
+Define the Feign Client interface that will be used to call the `firebase-storage-service`. This interface will specify the API endpoints.
+
+**Feign and Eureka Integration**: Feign integrates with **Eureka** via **Spring Cloud**. When you define a Feign Client with the `@FeignClient(name = "service-name")` annotation, Feign will use Eureka to discover the service by its name.
+
+For Example:
+
+```java
+package com.beesocial.usermanagementservice.feign;
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Map;
+
+@FeignClient(name = "firebase-storage-service")
+public interface FirebaseStorageClient {
+
+    @GetMapping("/api/firebase/{collectionName}/{documentId}")
+    Map<String, Object> getDocument(@PathVariable("collectionName") String collectionName, @PathVariable("documentId") String documentId);
+}
+```
+
+In this case, Feign will look for the service named `firebase-storage-service` in the Eureka registry. It will automatically handle the service discovery, load balancing, and communication with instances of that service.
+
+**Load Balancing**: Feign, in combination with **Ribbon** (which is part of Spring Cloud’s load balancing solution), automatically performs **client-side load balancing** across the instances of the service registered under the same name.
+
+So, if there are multiple instances of `firebase-storage-service` running, Feign will distribute the load across them.
+
+## Use Feign Client in the Controller
+
+Inject the Feign Client into your controller and use it to make a call to the external service.
+
+```java
+package com.beesocial.usermanagementservice.controller;
+
+import com.beesocial.usermanagementservice.feign.FirebaseStorageClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+public class UserManagementServiceController {
+
+    private final FirebaseStorageClient firebaseStorageClient;
+
+    public UserManagementServiceController(FirebaseStorageClient firebaseStorageClient) {
+        this.firebaseStorageClient = firebaseStorageClient;
+    }
+
+    @GetMapping("/getDocument")
+    public Map<String, Object> getDocument(@RequestParam String collectionName, @RequestParam String documentId) {
+        return firebaseStorageClient.getDocument(collectionName, documentId);
+    }
+}
+```
