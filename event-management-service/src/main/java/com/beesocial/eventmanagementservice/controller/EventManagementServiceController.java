@@ -4,7 +4,6 @@ import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.service.EventService;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +50,7 @@ public class EventManagementServiceController {
         }
     }
 
-    @PostMapping("/events")
+    @PostMapping()
     public String saveEvent(@RequestBody Event event) {
         List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
         if(instances != null && !instances.isEmpty()){

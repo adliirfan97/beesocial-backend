@@ -14,7 +14,7 @@ public class EventService {
         public ResponseEntity<Object> saveEvent(Event event){
         String text = event.getText();
         String image = event.getImage();
-        if(event.getUserId() == 0){
+        if(event.getUserId() == null || event.getUserId().isEmpty()){
             return ResponseEntity.badRequest().body("no host for event");
         }
         if((text == null || text.isEmpty()) && (image == null || image.isEmpty())){
@@ -28,7 +28,6 @@ public class EventService {
         }
 
         Map<String, Object> eventMap = new HashMap<>();
-        eventMap.put("eventId", event.getEventId());
         eventMap.put("userId", event.getUserId());
         eventMap.put("text", event.getText());
         eventMap.put("image", event.getImage());
