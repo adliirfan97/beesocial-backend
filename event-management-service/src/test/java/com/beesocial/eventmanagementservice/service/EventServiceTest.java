@@ -103,8 +103,8 @@ public class EventServiceTest {
     public void testAddApplicantById(){
         EventService eventService = new EventService();
 
-        EventApplicant eventApplicant = new EventApplicant(1, 1);
+        EventApplicant eventApplicant = new EventApplicant("e123", "u123");
 
-        assertEquals(eventApplicant, eventService.addApplicantById(1, 1).getBody());
+        assertEquals(eventApplicant, eventService.addApplicantById("e123", "u123").getBody());
     }
 }

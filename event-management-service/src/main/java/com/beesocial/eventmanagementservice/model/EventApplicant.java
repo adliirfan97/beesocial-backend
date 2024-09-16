@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 public class EventApplicant {
-    private int eventId;
-    private int userId;
+    private String eventId;
+    private String userId;
     private LocalDateTime timestamp;
 
-    public EventApplicant(int eventId, int userId) {
+    public EventApplicant(String eventId, String userId) {
         this.eventId = eventId;
         this.userId = userId;
         this.timestamp = LocalDateTime.now();
