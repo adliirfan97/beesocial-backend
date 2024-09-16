@@ -58,5 +58,12 @@ public class FirestoreService {
             return null;  // Handle case where no user is found
         }
     }
+    public String editData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference documentReference = db.collection(collectionName)
+                .document(documentId);
+        ApiFuture<WriteResult> result = documentReference.update(data);
+        return result.get().getUpdateTime().toString();
+    }
 
 }
