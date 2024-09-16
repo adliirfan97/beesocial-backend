@@ -1,10 +1,14 @@
 package com.beesocial.firebasestorageservice.controller;
 
 import com.beesocial.firebasestorageservice.model.User;
+import com.beesocial.firebasestorageservice.service.CloudStorageService;
 import com.beesocial.firebasestorageservice.service.FirestoreService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -14,9 +18,11 @@ public class FirebaseController {
 
 
     private final FirestoreService firestoreService;
+    private final CloudStorageService cloudStorageService;
 
-    public FirebaseController(FirestoreService firestoreService) {
+    public FirebaseController(FirestoreService firestoreService, CloudStorageService cloudStorageService) {
         this.firestoreService = firestoreService;
+        this.cloudStorageService = cloudStorageService;
     }
 
     // Save any object to a collection (e.g., "users", "posts", "comments")
@@ -46,17 +52,31 @@ public class FirebaseController {
         return ResponseEntity.ok("Data deleted from " + collectionName);
     }
 
-    // Firestore: Save user data
-    @PostMapping("/saveUser")
-    public ResponseEntity<String> saveUserData(@RequestParam String firstName, @RequestParam String email) throws ExecutionException, InterruptedException {
-        String updateTime = firestoreService.saveUserData(firstName, email);
-        return ResponseEntity.ok("User data saved at: " + updateTime);
+    // Cloud Storage: Upload a file
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        String fileName = cloudStorageService.uploadFile(file);
+        return ResponseEntity.ok("File uploaded: " + fileName);
     }
 
-    @GetMapping("/user/{email}")
-    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
-        User user = firestoreService.getUserByEmail(email);
-
-        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+    // Cloud Storage: Get download URL
+    @GetMapping("/file/{fileName}")
+    public ResponseEntity<String> getFileUrl(@PathVariable String fileName) throws IOException {
+        URL url = cloudStorageService.generateDownloadUrl(fileName);
+        return ResponseEntity.ok(url.toString());
     }
+
+//    // Firestore: Save user data
+//    @PostMapping("/saveUser")
+//    public ResponseEntity<String> saveUserData(@RequestParam String firstName, @RequestParam String email) throws ExecutionException, InterruptedException {
+//        String updateTime = firestoreService.saveUserData(firstName, email);
+//        return ResponseEntity.ok("User data saved at: " + updateTime);
+//    }
+//
+//    @GetMapping("/user/{email}")
+//    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
+//        User user = firestoreService.getUserByEmail(email);
+//
+//        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
+//    }
 }

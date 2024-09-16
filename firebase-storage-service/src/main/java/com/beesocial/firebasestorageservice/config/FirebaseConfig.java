@@ -19,6 +19,7 @@ public class FirebaseConfig {
 
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(credentials)
+                .setStorageBucket("bee-social-bb037.appspot.com")
                 .build();
 
         return FirebaseApp.initializeApp(options);
