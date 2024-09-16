@@ -4,6 +4,7 @@ import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.service.EventService;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,21 +52,26 @@ public class EventManagementServiceController {
     }
 
     @PostMapping()
-    public String saveEvent(@RequestBody Event event) {
+    public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
         List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
         if(instances != null && !instances.isEmpty()){
             ServiceInstance serviceInstance = instances.getFirst();
             String uri = serviceInstance.getUri().toString() + "/api/firebase/events";
             System.out.println("Service URI: "+uri);
 
-            return webClient.post()
+            if(eventService.saveEvent(event).getStatusCode() == ResponseEntity.badRequest().body("no text and no image").getStatusCode()){
+                return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
+            }
+
+            String response = webClient.post()
                     .uri(uri)
                     .bodyValue(eventService.saveEvent(event))
                     .retrieve()
                     .bodyToMono(String.class)
                     .block();
+            return ResponseEntity.ok(response);
         }else{
-            return "Service instance not found";
+            return ResponseEntity.badRequest().body("Service instance not found");
         }
     }
 
