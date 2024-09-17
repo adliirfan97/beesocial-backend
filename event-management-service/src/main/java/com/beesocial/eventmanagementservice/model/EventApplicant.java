@@ -10,11 +10,10 @@ import java.time.LocalDateTime;
 public class EventApplicant {
     private String eventId;
     private String userId;
-    private LocalDateTime timestamp;
+    private LocalDateTime timestamp =  LocalDateTime.now();
 
     public EventApplicant(String eventId, String userId) {
         this.eventId = eventId;
         this.userId = userId;
-        this.timestamp = LocalDateTime.now();
     }
 }
