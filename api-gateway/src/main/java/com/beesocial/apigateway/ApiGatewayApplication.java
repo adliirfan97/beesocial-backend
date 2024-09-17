@@ -16,6 +16,10 @@ public class ApiGatewayApplication {
 	@Bean
 	public RouteLocator customRoutes(RouteLocatorBuilder builder) {
 		return builder.routes()
+				.route("firebase-storage-service", r -> r
+						.path("/firebase-storage-service/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://firebase-storage-service"))
 				.route("user-management-service", r -> r
 						.path("/user-management-service/**")
 						.filters(f -> f.stripPrefix(1))
