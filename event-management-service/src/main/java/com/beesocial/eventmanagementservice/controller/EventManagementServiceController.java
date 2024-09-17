@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class EventManagementServiceController {
@@ -56,6 +57,13 @@ public class EventManagementServiceController {
 
     @PostMapping()
     public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
+        Map<String, Object> user = firebaseStorageClient.getData("users", event.getUserId());
+        if(user == null || user.isEmpty()){
+            return ResponseEntity.badRequest().body("user not included");
+        }
+        if(user.get("role").equals(1)){
+            return ResponseEntity.badRequest().body("user not from HR");
+        }
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
                 return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
         }
@@ -63,6 +71,10 @@ public class EventManagementServiceController {
     }
     @PostMapping("/eventApplicant")
     public ResponseEntity<Object> addApplicantToEvent(@RequestBody EventApplicant eventApplicant) {
+        Map<String, Object> event = firebaseStorageClient.getData("events" ,eventApplicant.getEventId());
+        if (event == null || event.isEmpty()){
+            return ResponseEntity.badRequest().body("event do not exist");
+        }
         if(eventService.addApplicant(eventApplicant).getStatusCode().is4xxClientError()){
             return ResponseEntity.badRequest().body(eventService.addApplicant(eventApplicant).getBody());
         }
@@ -71,6 +83,13 @@ public class EventManagementServiceController {
 
     @PutMapping("/{documentId}")
     public ResponseEntity<Object> editEvent(@PathVariable String documentId, @RequestBody Event event) {
+        Map<String, Object> user = firebaseStorageClient.getData("users", event.getUserId());
+        if(user == null || user.isEmpty()){
+            return ResponseEntity.badRequest().body("user not included");
+        }
+        if(user.get("role").equals(1)){
+            return ResponseEntity.badRequest().body("user not from HR");
+        }
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
             return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
         }
@@ -93,5 +112,10 @@ public class EventManagementServiceController {
         } else {
             return "Service instance not found";
         }
+    }
+
+    @GetMapping("/allEvents")
+    public ResponseEntity<List<Map<String, Object>>> getAllEvents(){
+        return ResponseEntity.ok(firebaseStorageClient.getAllData("events"));
     }
 }
