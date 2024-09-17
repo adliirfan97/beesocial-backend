@@ -32,4 +32,8 @@ public class OpportunityService {
 
         return firebaseClient.createOpportunity(opportunityMap);
     }
+
+    public String getAll() {
+        return firebaseClient.getAll();
+    }
 }
