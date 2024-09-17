@@ -56,6 +56,17 @@ public class FirebaseController {
         return dataList != null && !dataList.isEmpty() ? ResponseEntity.ok(dataList) : ResponseEntity.notFound().build();
     }
 
+    //Update object from collection
+    @PutMapping("/{collectionName}/{documentId}")
+    public ResponseEntity<String> updateData(
+            @PathVariable String collectionName,
+            @PathVariable String documentId,
+            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
+        String updateTime = firestoreService.updateData(collectionName, documentId, data);
+        return ResponseEntity.ok("Document updated at: " + updateTime);
+    }
+
+
     // Delete any object from a collection
     @DeleteMapping("/{collectionName}/{documentId}")
     public ResponseEntity<String> deleteData(

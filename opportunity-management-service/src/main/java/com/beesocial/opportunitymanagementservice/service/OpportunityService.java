@@ -36,4 +36,25 @@ public class OpportunityService {
     public String getAll() {
         return firebaseClient.getAll();
     }
+
+    public String getOpportunity(String documentId) {
+        return firebaseClient.getOpportunity(documentId);
+    }
+
+    public String updateOpportunity(String documentId, OpportunityRequest opportunityRequest) {
+        Opportunity opportunity = new Opportunity(
+                documentId,
+                opportunityRequest.userId(),
+                opportunityRequest.text(),
+                opportunityRequest.image(),
+                System.currentTimeMillis());
+
+        Map<String,Object> opportunityMap  = objectMapper.convertValue(opportunity, Map.class);
+        return firebaseClient.updateOpportunity(documentId, opportunityMap);
+
+    }
+
+    public String deleteOpportunity(String documentId) {
+        return firebaseClient.deleteOpportunity(documentId);
+    }
 }
