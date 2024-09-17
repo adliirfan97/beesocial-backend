@@ -3,21 +3,24 @@ package com.beesocial.opportunitymanagementservice.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Data
 @NoArgsConstructor
 public class Opportunity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Opportunity_generator")
-    @SequenceGenerator(name = "Opportunity_generator", sequenceName = "Opportunity_seq", allocationSize = 1)
     private int opportunityId;
-    private int userId;
+    private String userId;
     private String text;
     private String image;
     private long timeStamp;
 
-    public Opportunity(int opportunityId, int userId, String text, String image, long timestamp) {
+    public Opportunity(int opportunityId, String  userId, String text, String image, long timestamp) {
         this.opportunityId = opportunityId;
+        this.userId = userId;
+        this.text = text;
+        this.image = image;
+        this.timeStamp = timestamp;
+    }
+
+    public Opportunity( String  userId, String text, String image, long timestamp) {
         this.userId = userId;
         this.text = text;
         this.image = image;

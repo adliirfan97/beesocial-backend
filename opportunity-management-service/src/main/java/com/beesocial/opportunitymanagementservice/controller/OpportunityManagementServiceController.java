@@ -28,10 +28,10 @@ public class OpportunityManagementServiceController {
         return "Test from Event Management Service";
     }
 
-    @PostMapping()
+    @PostMapping("/createOpportunity")
     public ResponseEntity<String>createOpportunity(@RequestBody @Valid OpportunityRequest opportunityRequest) {
-        //TODO: Add a new Opportunity to Database
-        return null;
+        String response = opportunityService.createOpportunity(opportunityRequest);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping()
