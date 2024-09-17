@@ -1,6 +1,8 @@
 package com.beesocial.eventmanagementservice.controller;
 
+import com.beesocial.eventmanagementservice.feign.FirebaseStorageClient;
 import com.beesocial.eventmanagementservice.model.Event;
+import com.beesocial.eventmanagementservice.model.EventApplicant;
 import com.beesocial.eventmanagementservice.service.EventService;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
@@ -15,16 +17,17 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/event")
 public class EventManagementServiceController {
     private final EurekaDiscoveryClient discoveryClient;
     private final WebClient webClient;
     private final EventService eventService;
+    private final FirebaseStorageClient firebaseStorageClient;
 
-    public EventManagementServiceController(EurekaDiscoveryClient discoveryClient, WebClient webClient, EventService eventService) {
+    public EventManagementServiceController(EurekaDiscoveryClient discoveryClient, WebClient webClient, EventService eventService, FirebaseStorageClient firebaseStorageClient) {
         this.discoveryClient = discoveryClient;
         this.webClient = webClient;
         this.eventService = eventService;
+        this.firebaseStorageClient = firebaseStorageClient;
     }
 
     @GetMapping("/testEvent")
@@ -53,50 +56,25 @@ public class EventManagementServiceController {
 
     @PostMapping()
     public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
-        List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
-        if(instances != null && !instances.isEmpty()){
-            ServiceInstance serviceInstance = instances.getFirst();
-            String uri = serviceInstance.getUri().toString() + "/api/firebase/events";
-            System.out.println("Service URI: "+uri);
-
-            if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
+        if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
                 return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
-            }
-
-            String response = webClient.post()
-                    .uri(uri)
-                    .bodyValue(eventService.saveEvent(event))
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return ResponseEntity.ok(response);
-        }else{
-            return ResponseEntity.badRequest().body("Service instance not found");
         }
+        return ResponseEntity.ok(firebaseStorageClient.saveData("events", eventService.saveEvent(event)));
+    }
+    @PostMapping("/eventApplicant")
+    public ResponseEntity<Object> addApplicantToEvent(@RequestBody EventApplicant eventApplicant) {
+        if(eventService.addApplicant(eventApplicant).getStatusCode().is4xxClientError()){
+            return ResponseEntity.badRequest().body(eventService.addApplicant(eventApplicant).getBody());
+        }
+        return ResponseEntity.ok(firebaseStorageClient.saveData("eventApplicants", eventService.addApplicant(eventApplicant)));
     }
 
     @PutMapping("/{documentId}")
     public ResponseEntity<Object> editEvent(@PathVariable String documentId, @RequestBody Event event) {
-        List<ServiceInstance> instances = discoveryClient.getInstances("firebase-storage-service");
-        if(instances != null && !instances.isEmpty()){
-            ServiceInstance serviceInstance = instances.getFirst();
-            String uri = serviceInstance.getUri().toString() + "/api/firebase/events/"+documentId;
-            System.out.println("Service URI: "+uri);
-
-            if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
-                return ResponseEntity.badRequest().body(eventService.editEvent(event).getBody());
-            }
-
-            String response = webClient.put()
-                    .uri(uri)
-                    .bodyValue(eventService.editEvent(event))
-                    .retrieve()
-                    .bodyToMono(String.class)
-                    .block();
-            return ResponseEntity.ok(response);
-        }else{
-            return ResponseEntity.badRequest().body("Service instance not found");
+        if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
+            return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
         }
+        return ResponseEntity.ok(firebaseStorageClient.editData("events", documentId, eventService.editEvent(event)));
     }
 
     @GetMapping("/getUser")

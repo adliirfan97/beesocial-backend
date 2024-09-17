@@ -37,13 +37,18 @@ public class EventService {
         // ADD: save event to database
         return ResponseEntity.ok(eventMap);
     }
-    public ResponseEntity<Object> addApplicantById(String eventId, String userId){
-        // ADD: validation checks the existence of eventId and userId
-        // ADD: validation checks if the user has already applied to the event
+    public ResponseEntity<Object> addApplicant(EventApplicant eventApplicant){
+        String eventId = eventApplicant.getEventId();
+        String userId = eventApplicant.getUserId();
+        if(eventId==null || userId==null || eventId.isEmpty()||userId.isEmpty()){
+            return ResponseEntity.badRequest().body("no userId or eventId");
+        }
+        Map<String, Object> eventApplicantMap = new HashMap<>();
+        eventApplicantMap.put("eventId", eventId);
+        eventApplicantMap.put("userId", userId);
+        eventApplicantMap.put("timestamp", eventApplicant.getTimestamp());
 
-        EventApplicant eventApplicant = new EventApplicant(eventId, userId);
-
-        return ResponseEntity.ok(eventApplicant);
+        return ResponseEntity.ok(eventApplicantMap);
     }
     public ResponseEntity<Object> editEvent(Event event){
         String text = event.getText();
