@@ -2,11 +2,9 @@ package com.beesocial.eventmanagementservice.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @FeignClient(name = "firebase-storage-service")
@@ -15,4 +13,8 @@ public interface FirebaseStorageClient {
     public String saveData(@PathVariable String collectionName, @RequestBody ResponseEntity<Object> data);
     @PutMapping("/api/firebase/{collectionName}/{documentId}")
     public String editData(@PathVariable String collectionName, @PathVariable String documentId, @RequestBody ResponseEntity<Object> data);
+    @GetMapping("/api/firebase/{collectionName}/{documentId}")
+    public Map<String, Object> getData(@PathVariable String collectionName, @PathVariable String documentId);
+    @GetMapping("api/firebase/{collectionName}")
+    public List<Map<String, Object>> getAllData(@PathVariable String collectionName);
 }

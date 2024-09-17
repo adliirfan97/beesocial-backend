@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -86,6 +87,15 @@ public class FirebaseController {
         String updateTime = firestoreService.editData(collectionName, documentId, data);
         return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
     }
+
+    @GetMapping("/{collectionName}")
+    public ResponseEntity<List<Map<String, Object>>> getAllData(
+            @PathVariable String collectionName
+    ) throws ExecutionException, InterruptedException{
+        List<Map<String, Object>> data = firestoreService.getAllData(collectionName);
+        return data != null ? ResponseEntity.ok(data) : ResponseEntity.notFound().build();
+    }
+
 //    // Firestore: Save user data
 //    @PostMapping("/saveUser")
 //    public ResponseEntity<String> saveUserData(@RequestParam String firstName, @RequestParam String email) throws ExecutionException, InterruptedException {

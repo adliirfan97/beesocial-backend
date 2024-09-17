@@ -6,6 +6,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -31,33 +32,6 @@ public class FirestoreService {
         db.collection(collectionName).document(documentId).delete().get();
     }
 
-    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-        User user = new User(firstName, email);
-
-        // Firestore stores documents in collections
-        ApiFuture<DocumentReference> result = db.collection("users").add(user);
-        return result.get().toString();
-    }
-
-    public User getUserByEmail(String email) throws ExecutionException, InterruptedException {
-        Firestore db = FirestoreClient.getFirestore();
-
-        // Query Firestore for documents where the 'email' field matches the given email
-        ApiFuture<QuerySnapshot> future = db.collection("users")
-                .whereEqualTo("email", email)
-                .get();
-
-        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-
-        // Check if any document is found
-        if (!documents.isEmpty()) {
-            // Convert the first document to a User object (assuming email is unique)
-            return documents.getFirst().toObject(User.class);
-        } else {
-            return null;  // Handle case where no user is found
-        }
-    }
     public String editData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
         DocumentReference documentReference = db.collection(collectionName)
@@ -65,6 +39,17 @@ public class FirestoreService {
         ApiFuture<WriteResult> result = documentReference.update(data);
         return result.get().getUpdateTime().toString();
     }
+
+    public List<Map<String, Object>> getAllData (String collectionName)throws ExecutionException, InterruptedException{
+        Firestore db = FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future = db.collection(collectionName).get();
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+        List<Map<String, Object>> dataList = new ArrayList<>();
+        documents.forEach(document -> dataList.add(document.getData()));
+        return dataList;
+    }
+
 //    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {
 //        Firestore db = FirestoreClient.getFirestore();
 //        User user = new User(firstName, email);
