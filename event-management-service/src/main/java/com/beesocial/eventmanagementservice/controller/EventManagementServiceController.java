@@ -58,10 +58,10 @@ public class EventManagementServiceController {
     @PostMapping()
     public ResponseEntity<Object> saveEvent(@RequestBody Event event) {
         Map<String, Object> user = firebaseStorageClient.getData("users", event.getUserId());
-        if(user == null || user.isEmpty()){
+        if(user == null || user.get("role") == null ||user.isEmpty()){
             return ResponseEntity.badRequest().body("user not included");
         }
-        if(user.get("role").equals(1)){
+        if(! user.get("role").equals("HR")){
             return ResponseEntity.badRequest().body("user not from HR");
         }
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
