@@ -6,6 +6,7 @@ import com.google.cloud.firestore.*;
 import com.google.firebase.cloud.FirestoreClient;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -15,9 +16,20 @@ public class FirestoreService {
 
     public String saveData(String collectionName, Map<String, Object> data) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
-        ApiFuture<DocumentReference> result = db.collection(collectionName).add(data);
-        return result.get().toString();
+
+        // Generate a new document reference (ID)
+        DocumentReference docRef = db.collection(collectionName).document(); // This generates a new document with a unique ID
+
+        // Add the generated document ID to the data map
+        data.put("documentId", docRef.getId());
+
+        // Save the document with the generated ID
+        ApiFuture<WriteResult> result = docRef.set(data);
+
+        // Return the document ID as the result
+        return docRef.getId();
     }
+
 
     public Map<String, Object> getData(String collectionName, String documentId) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
@@ -30,6 +42,28 @@ public class FirestoreService {
         Firestore db = FirestoreClient.getFirestore();
         db.collection(collectionName).document(documentId).delete().get();
     }
+
+    public List<Map<String, Object>> getAllData(String collectionName) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // Retrieve all documents in the collection
+        ApiFuture<QuerySnapshot> future = db.collection(collectionName).get();
+
+        // Get the results
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+        // Create a list to hold the data
+        List<Map<String, Object>> dataList = new ArrayList<>();
+
+        // Loop through the documents and add their data to the list
+        for (QueryDocumentSnapshot document : documents) {
+            dataList.add(document.getData());
+        }
+
+        return dataList;
+    }
+
+
 
 //    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {
 //        Firestore db = FirestoreClient.getFirestore();

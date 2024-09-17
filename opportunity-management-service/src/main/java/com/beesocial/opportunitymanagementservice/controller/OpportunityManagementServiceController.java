@@ -34,6 +34,12 @@ public class OpportunityManagementServiceController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/getAllOpportunity")
+    public ResponseEntity<String>getAll() {
+        String response = opportunityService.getAll();
+        return ResponseEntity.ok(response);
+    }
+
     @PutMapping()
     public ResponseEntity<Void> updateOpportunity(@RequestBody @Valid OpportunityRequest opportunityRequest) {
         //TODO: Edit Opportunity to Database
