@@ -72,6 +72,10 @@ public class EventManagementServiceController {
     @PostMapping("/eventApplicant")
     public ResponseEntity<Object> addApplicantToEvent(@RequestBody EventApplicant eventApplicant) {
         Map<String, Object> event = firebaseStorageClient.getData("events" ,eventApplicant.getEventId());
+        Map<String, Object> user = firebaseStorageClient.getData("users", eventApplicant.getUserId());
+        if(user==null || user.isEmpty()){
+            return ResponseEntity.badRequest().body("user does not exist");
+        }
         if (event == null || event.isEmpty()){
             return ResponseEntity.badRequest().body("event do not exist");
         }
@@ -84,10 +88,10 @@ public class EventManagementServiceController {
     @PutMapping("/{documentId}")
     public ResponseEntity<Object> editEvent(@PathVariable String documentId, @RequestBody Event event) {
         Map<String, Object> user = firebaseStorageClient.getData("users", event.getUserId());
-        if(user == null || user.isEmpty()){
+        if(user == null ||user.get("role")==null|| user.isEmpty()){
             return ResponseEntity.badRequest().body("user not included");
         }
-        if(user.get("role").equals(1)){
+        if(!user.get("role").equals("HR")){
             return ResponseEntity.badRequest().body("user not from HR");
         }
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
