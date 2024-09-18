@@ -40,10 +40,22 @@ public class OpportunityManagementServiceController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateOpportunity(@RequestBody @Valid OpportunityRequest opportunityRequest) {
-        //TODO: Edit Opportunity to Database
-        return null;
+    @GetMapping("/getOpportunity/{documentId}")
+    public ResponseEntity<String>getAll(@PathVariable String documentId) {
+        String response = opportunityService.getOpportunity(documentId);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("updateOpportunity/{documentId}")
+    public ResponseEntity<String> updateOpportunity(@PathVariable String documentId, @RequestBody @Valid OpportunityRequest opportunityRequest) {
+        String response = opportunityService.updateOpportunity(documentId ,opportunityRequest);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/deleteOpportunity/{documentId}")
+    public ResponseEntity<String> deleteOpportunity(@PathVariable String documentId) {
+        String response = opportunityService.deleteOpportunity(documentId);
+        return ResponseEntity.ok(response);
     }
 
 

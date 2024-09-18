@@ -63,6 +63,14 @@ public class FirestoreService {
         return dataList;
     }
 
+    public String updateData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference docRef = db.collection(collectionName).document(documentId);
+        ApiFuture<WriteResult> writeResult = docRef.set(data, SetOptions.merge());
+        return writeResult.get().getUpdateTime().toString(); // returns the update timestamp
+    }
+
+
 
 
 //    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {

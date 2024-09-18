@@ -15,4 +15,14 @@ public interface FirebaseClient {
 
     @GetMapping("/api/firebase/opportunity/getAll")
     String getAll();
+
+    @GetMapping("/api/firebase/opportunity/{documentId}")
+    String getOpportunity(@PathVariable String documentId);
+
+    @PutMapping("/api/firebase/opportunity/{documentId}")
+    String updateOpportunity(@PathVariable("documentId") String documentId,
+                             @RequestBody Map<String, Object> opportunityMap);
+
+    @DeleteMapping("/api/firebase/opportunity/{documentId}")
+    String deleteOpportunity(@PathVariable String documentId);
 }
