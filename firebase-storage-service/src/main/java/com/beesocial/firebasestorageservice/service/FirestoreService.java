@@ -43,6 +43,14 @@ public class FirestoreService {
         db.collection(collectionName).document(documentId).delete().get();
     }
 
+    public String editData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference documentReference = db.collection(collectionName)
+                .document(documentId);
+        ApiFuture<WriteResult> result = documentReference.update(data);
+        return result.get().getUpdateTime().toString();
+    }
+
     public List<Map<String, Object>> getAllData(String collectionName) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 

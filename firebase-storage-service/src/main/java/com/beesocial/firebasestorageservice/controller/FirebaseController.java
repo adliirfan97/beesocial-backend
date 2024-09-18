@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -100,6 +101,16 @@ public class FirebaseController {
         URL url = cloudStorageService.generateDownloadUrl(fileName);
         return ResponseEntity.ok(url.toString());
     }
+
+    @PutMapping("/{collectionName}/{documentId}")
+    public ResponseEntity<String> editData(
+            @PathVariable String collectionName,
+            @PathVariable String documentId,
+            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
+        String updateTime = firestoreService.editData(collectionName, documentId, data);
+        return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
+    }
+
 
 //    // Firestore: Save user data
 //    @PostMapping("/saveUser")
