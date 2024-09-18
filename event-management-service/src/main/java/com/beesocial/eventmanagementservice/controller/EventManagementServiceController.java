@@ -67,7 +67,7 @@ public class EventManagementServiceController {
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
                 return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
         }
-        return ResponseEntity.ok(firebaseStorageClient.saveData("events", eventService.saveEvent(event)));
+        return ResponseEntity.ok(firebaseStorageClient.saveData("events", (Map<String, Object>) eventService.saveEvent(event).getBody()));
     }
     @PostMapping("/eventApplicant")
     public ResponseEntity<Object> addApplicantToEvent(@RequestBody EventApplicant eventApplicant) {
@@ -82,7 +82,7 @@ public class EventManagementServiceController {
         if(eventService.addApplicant(eventApplicant).getStatusCode().is4xxClientError()){
             return ResponseEntity.badRequest().body(eventService.addApplicant(eventApplicant).getBody());
         }
-        return ResponseEntity.ok(firebaseStorageClient.saveData("eventApplicants", eventService.addApplicant(eventApplicant)));
+        return ResponseEntity.ok(firebaseStorageClient.saveData("eventApplicants", (Map<String, Object>) eventService.addApplicant(eventApplicant).getBody()));
     }
 
     @PutMapping("/{documentId}")
@@ -97,7 +97,7 @@ public class EventManagementServiceController {
         if(eventService.saveEvent(event).getStatusCode().is4xxClientError()){
             return ResponseEntity.badRequest().body(eventService.saveEvent(event).getBody());
         }
-        return ResponseEntity.ok(firebaseStorageClient.editData("events", documentId, eventService.editEvent(event)));
+        return ResponseEntity.ok(firebaseStorageClient.editData("events", documentId, (Map<String, Object>) eventService.editEvent(event).getBody()));
     }
 
     @GetMapping("/getUser")

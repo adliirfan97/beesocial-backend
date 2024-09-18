@@ -10,9 +10,9 @@ import java.util.Map;
 @FeignClient(name = "firebase-storage-service")
 public interface FirebaseStorageClient {
     @PostMapping("/api/firebase/{collectionName}")
-    public String saveData(@PathVariable String collectionName, @RequestBody ResponseEntity<Object> data);
+    public String saveData(@PathVariable String collectionName, @RequestBody Map<String, Object> data);
     @PutMapping("/api/firebase/{collectionName}/{documentId}")
-    public String editData(@PathVariable String collectionName, @PathVariable String documentId, @RequestBody ResponseEntity<Object> data);
+    public String editData(@PathVariable String collectionName, @PathVariable String documentId, @RequestBody Map<String, Object> data);
     @GetMapping("/api/firebase/{collectionName}/{documentId}")
     public Map<String, Object> getData(@PathVariable String collectionName, @PathVariable String documentId);
     @GetMapping("/api/firebase/{collectionName}/getAll")
