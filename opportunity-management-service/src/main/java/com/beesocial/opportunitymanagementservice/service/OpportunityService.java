@@ -2,7 +2,7 @@ package com.beesocial.opportunitymanagementservice.service;
 
 import com.beesocial.opportunitymanagementservice.dto.OpportunityRequest;
 import com.beesocial.opportunitymanagementservice.model.Opportunity;
-import com.beesocial.opportunitymanagementservice.repository.FirebaseClient;
+import com.beesocial.opportunitymanagementservice.feign.FirebaseClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 

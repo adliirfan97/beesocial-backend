@@ -1,8 +1,6 @@
-package com.beesocial.opportunitymanagementservice.repository;
+package com.beesocial.opportunitymanagementservice.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
