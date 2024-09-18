@@ -102,14 +102,14 @@ public class FirebaseController {
         return ResponseEntity.ok(url.toString());
     }
 
-    @PutMapping("/{collectionName}/{documentId}")
-    public ResponseEntity<String> editData(
-            @PathVariable String collectionName,
-            @PathVariable String documentId,
-            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
-        String updateTime = firestoreService.editData(collectionName, documentId, data);
-        return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
-    }
+//    @PutMapping("/{collectionName}/{documentId}")
+//    public ResponseEntity<String> editData(
+//            @PathVariable String collectionName,
+//            @PathVariable String documentId,
+//            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
+//        String updateTime = firestoreService.editData(collectionName, documentId, data);
+//        return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
+//    }
 
 
 //    // Firestore: Save user data
