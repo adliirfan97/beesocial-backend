@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,17 @@ public class FirebaseController {
             @PathVariable String documentId) throws ExecutionException, InterruptedException {
         Map<String, Object> data = firestoreService.getData(collectionName, documentId);
         return data != null ? ResponseEntity.ok(data) : ResponseEntity.notFound().build();
+    }
+
+    // Retrieve all objects from a collection
+    @GetMapping("/{collectionName}/getAll")
+    public ResponseEntity<List<Map<String, Object>>> getAllData(
+            @PathVariable String collectionName) throws ExecutionException, InterruptedException {
+
+        List<Map<String, Object>> dataList = firestoreService.getAllData(collectionName);
+
+        // Return the list of data or a 404 if the collection is empty
+        return dataList != null && !dataList.isEmpty() ? ResponseEntity.ok(dataList) : ResponseEntity.notFound().build();
     }
 
     // Delete any object from a collection
@@ -88,13 +100,6 @@ public class FirebaseController {
         return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
     }
 
-    @GetMapping("/{collectionName}")
-    public ResponseEntity<List<Map<String, Object>>> getAllData(
-            @PathVariable String collectionName
-    ) throws ExecutionException, InterruptedException{
-        List<Map<String, Object>> data = firestoreService.getAllData(collectionName);
-        return data != null ? ResponseEntity.ok(data) : ResponseEntity.notFound().build();
-    }
 
 //    // Firestore: Save user data
 //    @PostMapping("/saveUser")

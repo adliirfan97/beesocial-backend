@@ -15,6 +15,6 @@ public interface FirebaseStorageClient {
     public String editData(@PathVariable String collectionName, @PathVariable String documentId, @RequestBody ResponseEntity<Object> data);
     @GetMapping("/api/firebase/{collectionName}/{documentId}")
     public Map<String, Object> getData(@PathVariable String collectionName, @PathVariable String documentId);
-    @GetMapping("api/firebase/{collectionName}")
+    @GetMapping("api/firebase/{collectionName}/getAll")
     public List<Map<String, Object>> getAllData(@PathVariable String collectionName);
 }
