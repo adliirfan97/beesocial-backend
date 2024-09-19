@@ -78,9 +78,6 @@ public class FirestoreService {
         return writeResult.get().getUpdateTime().toString(); // returns the update timestamp
     }
 
-
-
-
 //    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {
 //        Firestore db = FirestoreClient.getFirestore();
 //        User user = new User(firstName, email);
@@ -89,24 +86,24 @@ public class FirestoreService {
 //        ApiFuture<DocumentReference> result = db.collection("users").add(user);
 //        return result.get().toString();
 //    }
-//
-//    public User getUserByEmail(String email) throws ExecutionException, InterruptedException {
-//        Firestore db = FirestoreClient.getFirestore();
-//
-//        // Query Firestore for documents where the 'email' field matches the given email
-//        ApiFuture<QuerySnapshot> future = db.collection("users")
-//                .whereEqualTo("email", email)
-//                .get();
-//
-//        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-//
-//        // Check if any document is found
-//        if (!documents.isEmpty()) {
-//            // Convert the first document to a User object (assuming email is unique)
-//            return documents.getFirst().toObject(User.class);
-//        } else {
-//            return null;  // Handle case where no user is found
-//        }
-//    }
+
+    public User getUserByEmail(String email) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // Query Firestore for documents where the 'email' field matches the given email
+        ApiFuture<QuerySnapshot> future = db.collection("users")
+                .whereEqualTo("email", email)
+                .get();
+
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+        // Check if any document is found
+        if (!documents.isEmpty()) {
+            // Convert the first document to a User object (assuming email is unique)
+            return documents.getFirst().toObject(User.class);
+        } else {
+            return null;  // Handle case where no user is found
+        }
+    }
 
 }

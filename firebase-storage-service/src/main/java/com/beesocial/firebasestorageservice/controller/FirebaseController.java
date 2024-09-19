@@ -119,10 +119,10 @@ public class FirebaseController {
 //        return ResponseEntity.ok("User data saved at: " + updateTime);
 //    }
 //
-//    @GetMapping("/user/{email}")
-//    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
-//        User user = firestoreService.getUserByEmail(email);
-//
-//        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/user/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
+        User user = firestoreService.getUserByEmail(email);
+
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.badRequest().body(new User());
+    }
 }
