@@ -1,9 +1,7 @@
 package com.beesocial.usermanagementservice.controller;
 
 import com.beesocial.usermanagementservice.feign.FirebaseStorageClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
