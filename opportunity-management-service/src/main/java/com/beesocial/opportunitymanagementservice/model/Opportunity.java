@@ -1,25 +1,29 @@
 package com.beesocial.opportunitymanagementservice.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Entity
 @Data
 @NoArgsConstructor
 public class Opportunity {
-    private String documentId;
-    private String userId;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Opportunity_generator")
+    @SequenceGenerator(name = "Opportunity_generator", sequenceName = "Opportunity_seq", allocationSize = 1)
+    private int opportunityId;
+    @ManyToOne
+    private int userId;
     private String text;
     private String url;
-    private long timeStamp;
+    private LocalDateTime timeStamp;
+    @ElementCollection
+    private List<String> applicantIds;
 
-    public Opportunity(String documentId, String  userId, String text, String url, long timestamp) {
-        this.documentId = documentId;
-        this.userId = userId;
-        this.text = text;
-        this.url = url;
-        this.timeStamp = timestamp;
-    }
-
-    public Opportunity(String  userId, String text, String url, long timestamp) {
+    public Opportunity(int userId, String text, String url, LocalDateTime timestamp) {
         this.userId = userId;
         this.text = text;
         this.url = url;
