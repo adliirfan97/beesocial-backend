@@ -43,6 +43,14 @@ public class FirestoreService {
         db.collection(collectionName).document(documentId).delete().get();
     }
 
+    public String editData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference documentReference = db.collection(collectionName)
+                .document(documentId);
+        ApiFuture<WriteResult> result = documentReference.update(data);
+        return result.get().getUpdateTime().toString();
+    }
+
     public List<Map<String, Object>> getAllData(String collectionName) throws ExecutionException, InterruptedException {
         Firestore db = FirestoreClient.getFirestore();
 
@@ -63,7 +71,12 @@ public class FirestoreService {
         return dataList;
     }
 
-
+    public String updateData(String collectionName, String documentId, Map<String, Object> data) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+        DocumentReference docRef = db.collection(collectionName).document(documentId);
+        ApiFuture<WriteResult> writeResult = docRef.set(data, SetOptions.merge());
+        return writeResult.get().getUpdateTime().toString(); // returns the update timestamp
+    }
 
 //    public String saveUserData(String firstName, String email) throws ExecutionException, InterruptedException {
 //        Firestore db = FirestoreClient.getFirestore();
@@ -73,24 +86,24 @@ public class FirestoreService {
 //        ApiFuture<DocumentReference> result = db.collection("users").add(user);
 //        return result.get().toString();
 //    }
-//
-//    public User getUserByEmail(String email) throws ExecutionException, InterruptedException {
-//        Firestore db = FirestoreClient.getFirestore();
-//
-//        // Query Firestore for documents where the 'email' field matches the given email
-//        ApiFuture<QuerySnapshot> future = db.collection("users")
-//                .whereEqualTo("email", email)
-//                .get();
-//
-//        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
-//
-//        // Check if any document is found
-//        if (!documents.isEmpty()) {
-//            // Convert the first document to a User object (assuming email is unique)
-//            return documents.getFirst().toObject(User.class);
-//        } else {
-//            return null;  // Handle case where no user is found
-//        }
-//    }
+
+    public User getUserByEmail(String email) throws ExecutionException, InterruptedException {
+        Firestore db = FirestoreClient.getFirestore();
+
+        // Query Firestore for documents where the 'email' field matches the given email
+        ApiFuture<QuerySnapshot> future = db.collection("users")
+                .whereEqualTo("email", email)
+                .get();
+
+        List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+
+        // Check if any document is found
+        if (!documents.isEmpty()) {
+            // Convert the first document to a User object (assuming email is unique)
+            return documents.getFirst().toObject(User.class);
+        } else {
+            return null;  // Handle case where no user is found
+        }
+    }
 
 }

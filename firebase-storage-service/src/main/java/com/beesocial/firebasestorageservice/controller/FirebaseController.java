@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -56,6 +57,17 @@ public class FirebaseController {
         return dataList != null && !dataList.isEmpty() ? ResponseEntity.ok(dataList) : ResponseEntity.notFound().build();
     }
 
+    //Update object from collection
+    @PutMapping("/{collectionName}/{documentId}")
+    public ResponseEntity<String> updateData(
+            @PathVariable String collectionName,
+            @PathVariable String documentId,
+            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
+        String updateTime = firestoreService.updateData(collectionName, documentId, data);
+        return ResponseEntity.ok("Document updated at: " + updateTime);
+    }
+
+
     // Delete any object from a collection
     @DeleteMapping("/{collectionName}/{documentId}")
     public ResponseEntity<String> deleteData(
@@ -90,6 +102,16 @@ public class FirebaseController {
         return ResponseEntity.ok(url.toString());
     }
 
+//    @PutMapping("/{collectionName}/{documentId}")
+//    public ResponseEntity<String> editData(
+//            @PathVariable String collectionName,
+//            @PathVariable String documentId,
+//            @RequestBody Map<String, Object> data) throws ExecutionException, InterruptedException {
+//        String updateTime = firestoreService.editData(collectionName, documentId, data);
+//        return ResponseEntity.ok("Data in " + collectionName + " updated at: " + updateTime);
+//    }
+
+
 //    // Firestore: Save user data
 //    @PostMapping("/saveUser")
 //    public ResponseEntity<String> saveUserData(@RequestParam String firstName, @RequestParam String email) throws ExecutionException, InterruptedException {
@@ -97,10 +119,10 @@ public class FirebaseController {
 //        return ResponseEntity.ok("User data saved at: " + updateTime);
 //    }
 //
-//    @GetMapping("/user/{email}")
-//    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
-//        User user = firestoreService.getUserByEmail(email);
-//
-//        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/user/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) throws ExecutionException, InterruptedException {
+        User user = firestoreService.getUserByEmail(email);
+
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.badRequest().body(new User());
+    }
 }

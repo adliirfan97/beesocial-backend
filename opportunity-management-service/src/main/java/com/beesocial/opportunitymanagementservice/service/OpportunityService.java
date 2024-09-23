@@ -2,38 +2,46 @@ package com.beesocial.opportunitymanagementservice.service;
 
 import com.beesocial.opportunitymanagementservice.dto.OpportunityRequest;
 import com.beesocial.opportunitymanagementservice.model.Opportunity;
-import com.beesocial.opportunitymanagementservice.feign.FirebaseClient;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.beesocial.opportunitymanagementservice.repository.OpportunityRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.time.LocalDateTime;
+
 
 @Service
 public class OpportunityService {
 
-    private final FirebaseClient firebaseClient;
-    private final ObjectMapper objectMapper;
+    @Autowired
+    private OpportunityRepository opportunityRepository;
 
 
-    public OpportunityService(FirebaseClient firebaseClient, ObjectMapper objectMapper) {
-        this.firebaseClient = firebaseClient;
-        this.objectMapper = objectMapper;
+    public Opportunity createOpportunity(OpportunityRequest opportunityRequest) {
+        LocalDateTime currentTimestamp = LocalDateTime.now();
 
-    }
-
-    public String createOpportunity(OpportunityRequest opportunityRequest) {
         Opportunity opportunity = new Opportunity(
                 opportunityRequest.userId(),
                 opportunityRequest.text(),
-                opportunityRequest.image(),
-                System.currentTimeMillis());
-
-        Map<String,Object> opportunityMap  = objectMapper.convertValue(opportunity, Map.class);
-
-        return firebaseClient.createOpportunity(opportunityMap);
+                opportunityRequest.url(),
+                currentTimestamp
+        );
+        return opportunityRepository.save(opportunity);
     }
 
     public String getAll() {
-        return firebaseClient.getAll();
+        return null;
+    }
+
+    public String getOpportunity(int opportunityId) {
+        return null;
+    }
+
+    public String updateOpportunity(int opportunityId, OpportunityRequest opportunityRequest) {
+        return null;
+
+    }
+
+    public String deleteOpportunity(int opportunityId) {
+        return null;
     }
 }
