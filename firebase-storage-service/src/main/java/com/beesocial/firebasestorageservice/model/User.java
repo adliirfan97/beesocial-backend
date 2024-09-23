@@ -3,6 +3,7 @@ package com.beesocial.firebasestorageservice.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// For Testing
 @Data
 @NoArgsConstructor
 public class User {

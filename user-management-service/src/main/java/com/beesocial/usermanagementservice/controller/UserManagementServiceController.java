@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("user")
 public class UserManagementServiceController {
     private final UserService userService;
 
