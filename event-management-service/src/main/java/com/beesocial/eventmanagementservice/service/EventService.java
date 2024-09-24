@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -122,6 +123,11 @@ public class EventService {
         }
         EventApplicant eventApplicant = new EventApplicant(eventId, userId);
         return ResponseEntity.ok(eventApplicantRepository.save(eventApplicant));
+    }
+
+    public ResponseEntity<?> getAllEvents(){
+        List<Event> eventList = eventRepository.findAll();
+        return ResponseEntity.ok(eventList);
     }
 
 //
