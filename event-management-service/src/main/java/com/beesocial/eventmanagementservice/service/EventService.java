@@ -1,7 +1,10 @@
 package com.beesocial.eventmanagementservice.service;
 
+import com.beesocial.eventmanagementservice.feign.UserManagementClient;
 import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.model.EventApplicant;
+import com.beesocial.eventmanagementservice.model.ROLE;
+import com.beesocial.eventmanagementservice.model.UserDTO;
 import com.beesocial.eventmanagementservice.repository.EventApplicantRepository;
 import com.beesocial.eventmanagementservice.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,8 @@ public class EventService {
     private EventRepository eventRepository;
     @Autowired
     private EventApplicantRepository eventApplicantRepository;
+    @Autowired
+    private UserManagementClient userManagementClient;
 
     public String removeSpaceFromText(String text){
         return text.replaceAll("[^a-zA-Z0-9\\p{Punct}]", "");
@@ -38,6 +43,14 @@ public class EventService {
         }
         if(event.getUserId() <=0){
             return ResponseEntity.badRequest().body("no host");
+        }
+        Optional<UserDTO> userDTOOptional = userManagementClient.getUserById(event.getUserId());
+        if(userDTOOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        UserDTO userDTO = userDTOOptional.get();
+        if(userDTO.getRole()!= ROLE.HR){
+            return ResponseEntity.badRequest().body("user is not HR");
         }
         String text = event.getText();
         String image = event.getImage();
@@ -66,6 +79,14 @@ public class EventService {
         Event event = eventOptional.get();
         if(updatedEvent.getUserId() <=0){
             return ResponseEntity.badRequest().body("no host");
+        }
+        Optional<UserDTO> userDTOOptional = userManagementClient.getUserById(updatedEvent.getUserId());
+        if(userDTOOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        UserDTO userDTO = userDTOOptional.get();
+        if(userDTO.getRole()!=ROLE.HR){
+            return ResponseEntity.badRequest().body("user is not HR");
         }
         String text = updatedEvent.getText();
         String image = updatedEvent.getImage();
