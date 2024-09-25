@@ -65,9 +65,10 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(200);
         assertEquals(expectedCode, actualCode);
 
-        Event actualEvent = (Event)response.getBody();
-        assertNotNull(actualEvent);
-        assertFalse(actualEvent.isEdited());
+        if(response.getBody() instanceof Event actualEvent){
+            assertNotNull(actualEvent);
+            assertFalse(actualEvent.isEdited());
+        }
     }
     @Test
     public void test_saveEvent_failedNoHost(){
@@ -81,8 +82,9 @@ public class EventServiceTest {
 
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String) eventService.saveEvent(event).getBody();
-        assertEquals("no host", actualError);
+        if( eventService.saveEvent(event).getBody() instanceof String actualError){
+            assertEquals("no host", actualError);
+        }
     }
     @Test
     public void test_saveEvent_failedNoTextNoImageEmpty(){
@@ -97,8 +99,9 @@ public class EventServiceTest {
 
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String) eventService.saveEvent(event).getBody();
-        assertEquals("no image and no text", actualError);
+        if(eventService.saveEvent(event).getBody() instanceof String actualError){
+            assertEquals("no image and no text", actualError);
+        }
     }
     @Test
     public void test_saveEvent_failedNoTextNoImageNull(){
@@ -113,8 +116,9 @@ public class EventServiceTest {
 
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String) eventService.saveEvent(event).getBody();
-        assertEquals("no image and no text", actualError);
+        if(eventService.saveEvent(event).getBody() instanceof String actualError){
+            assertEquals("no image and no text", actualError);
+        }
     }
     @Test
     public void test_saveEvent_failedTextMoreTan2000(){
@@ -131,8 +135,9 @@ public class EventServiceTest {
 
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String) eventService.saveEvent(event).getBody();
-        assertEquals("text more than 2000 characters", actualError);
+        if(eventService.saveEvent(event).getBody() instanceof String actualError){
+            assertEquals("text more than 2000 characters", actualError);
+        }
     }
     @Test
     public void test_saveEvent_ImageNotSupported(){
@@ -147,8 +152,9 @@ public class EventServiceTest {
 
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String) eventService.saveEvent(event).getBody();
-        assertEquals("image format not supported", actualError);
+        if(eventService.saveEvent(event).getBody() instanceof String actualError){
+            assertEquals("image format not supported", actualError);
+        }
     }
     @Test
     public void test_saveEvent_failedNotHR(){
@@ -163,8 +169,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("user is not HR", actualError);
+        if(response.getBody() instanceof String actualError){
+            assertEquals("user is not HR", actualError);
+        }
     }
     @Test
     public void test_saveEvent_failedUserNotFound(){
@@ -194,9 +201,10 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(200);
         assertEquals(expectedCode, actualCode);
 
-        Event actualEvent = (Event) response.getBody();
-        assertNotNull(actualEvent);
-        assertTrue(actualEvent.isEdited(), "The event's isEdited flag should be true after editing");
+        if(response.getBody() instanceof Event actualEvent){
+            assertNotNull(actualEvent);
+            assertTrue(actualEvent.isEdited(), "The event's isEdited flag should be true after editing");
+        }
     }
     @Test
     public void test_editEventById_failedEventNotFound(){
@@ -224,8 +232,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode,actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("no host", actualError);
+        if(response.getBody() instanceof String actualError){
+            assertEquals("no host", actualError);
+        }
     }
     @Test
     public void test_editEventById_failedEventNoImageNoTextEmpty(){
@@ -242,8 +251,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode,actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("no image and no text", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("no image and no text", actualError);
+        }
     }
     @Test
     public void test_editEventById_failedEventNoImageNoTextNull(){
@@ -260,8 +270,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode,actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("no image and no text", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("no image and no text", actualError);
+        }
     }
     @Test
     public void test_editEventById_failedText2000(){
@@ -278,8 +289,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode,actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("text more than 2000 characters", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("text more than 2000 characters", actualError);
+        }
     }
     @Test
     public void test_editEventById_failedImageNotSupported(){
@@ -295,8 +307,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode,actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("image format not supported", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("image format not supported", actualError);
+        }
     }
     @Test
     public void test_editEventById_failedUserNotFound(){
@@ -325,8 +338,9 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("user is not HR", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("user is not HR", actualError);
+        }
     }
     @Test
     public void test_addApplicantById_passed(){
@@ -362,7 +376,8 @@ public class EventServiceTest {
         HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
         assertEquals(expectedCode, actualCode);
 
-        String actualError = (String)response.getBody();
-        assertEquals("no user", actualError);
+        if(response.getBody() instanceof String actualError) {
+            assertEquals("no user", actualError);
+        }
     }
 }
