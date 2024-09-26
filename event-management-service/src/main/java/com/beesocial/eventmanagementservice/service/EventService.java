@@ -7,6 +7,7 @@ import com.beesocial.eventmanagementservice.model.ROLE;
 import com.beesocial.eventmanagementservice.model.UserDTO;
 import com.beesocial.eventmanagementservice.repository.EventApplicantRepository;
 import com.beesocial.eventmanagementservice.repository.EventRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -115,11 +116,22 @@ public class EventService {
 
     public ResponseEntity<?> addApplicantById(int eventId, int userId){
         Optional<Event> eventOptional = eventRepository.findById(eventId);
+        Optional<UserDTO> userDTOOptional = userManagementClient.getUserById(userId);
+        List<EventApplicant> eventApplicants = eventApplicantRepository.findAll();
+        if(!eventApplicants.isEmpty()){
+            List<Integer> usersEnrolled = eventApplicants.stream()
+                    .filter((ea)->ea.getEventId()==eventId)
+                    .map((ea)->ea.getUserId())
+                    .toList();
+            if(usersEnrolled.contains(userId)){
+                return ResponseEntity.badRequest().body("user already applied");
+            }
+        }
         if(eventOptional.isEmpty()){
             return ResponseEntity.notFound().build();
         }
-        if(userId<=0){
-            return ResponseEntity.badRequest().body("no user");
+        if(userDTOOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
         }
         EventApplicant eventApplicant = new EventApplicant(eventId, userId);
         return ResponseEntity.ok(eventApplicantRepository.save(eventApplicant));

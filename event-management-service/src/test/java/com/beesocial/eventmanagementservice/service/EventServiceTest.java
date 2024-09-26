@@ -15,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -370,7 +371,12 @@ public class EventServiceTest {
     public void test_addApplicantById_passed(){
         Event event = new Event(1, "Text", "Image.png");
         EventApplicant eventApplicant = new EventApplicant(1, 1);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUserId(1);
+        userDTO.setRole(ROLE.HR);
         when(eventRepository.findById(any(Integer.class))).thenReturn(Optional.of(event));
+        when(eventApplicantRepository.findAll()).thenReturn(new ArrayList<>());
+        when(userManagementClient.getUserById(any(Integer.class))).thenReturn(Optional.of(userDTO));
         when(eventApplicantRepository.save(any(EventApplicant.class))).thenReturn(eventApplicant);
 
         ResponseEntity<?> response = eventService.addApplicantById(1, 1);
@@ -397,11 +403,7 @@ public class EventServiceTest {
         ResponseEntity<?> response = eventService.addApplicantById(1, 0);
 
         HttpStatusCode actualCode = response.getStatusCode();
-        HttpStatusCode expectedCode = HttpStatusCode.valueOf(400);
+        HttpStatusCode expectedCode = HttpStatusCode.valueOf(404);
         assertEquals(expectedCode, actualCode);
-
-        if(response.getBody() instanceof String actualError) {
-            assertEquals("no user", actualError);
-        }
     }
 }
