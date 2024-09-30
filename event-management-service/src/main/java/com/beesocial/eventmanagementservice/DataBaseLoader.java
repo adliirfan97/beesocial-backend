@@ -28,7 +28,7 @@ public class DataBaseLoader implements ApplicationRunner {
         userManagementClient.saveNewUser(userDTO2);
 
         Event event = new Event(1, "Event happening on the 32/09/2024", "image/path/here.png");
-        Event event2 = new Event(1, "Event happening on the 32/09/2024", "image/path/here.png");
+        Event event2 = new Event(1, "Event happening on the 33/09/2024", null);
         eventRepository.save(event);
         eventRepository.save(event2);
     }
