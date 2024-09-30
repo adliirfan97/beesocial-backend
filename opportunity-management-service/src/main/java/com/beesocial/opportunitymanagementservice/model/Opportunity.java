@@ -15,7 +15,6 @@ public class Opportunity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Opportunity_generator")
     @SequenceGenerator(name = "Opportunity_generator", sequenceName = "Opportunity_seq", allocationSize = 1)
     private int opportunityId;
-    @ManyToOne
     private int userId;
     private String text;
     private String url;
