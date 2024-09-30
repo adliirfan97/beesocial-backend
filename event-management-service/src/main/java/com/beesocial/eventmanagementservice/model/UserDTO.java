@@ -14,10 +14,9 @@ public class UserDTO {
     private String phoneNumber;
     private String password;
     private String profilePhoto;
-    private String username;
     private ROLE role;
 
-    public UserDTO(int userId, String firstName, String lastName, String email, String phoneNumber, String password, String profilePhoto, String username, ROLE role) {
+    public UserDTO(int userId, String firstName, String lastName, String email, String phoneNumber, String password, String profilePhoto, ROLE role) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -25,7 +24,6 @@ public class UserDTO {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.profilePhoto = profilePhoto;
-        this.username = username;
         this.role = role;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @FeignClient(name = "user-management-service", url = "http://localhost:8081")
 public interface UserManagementClient {
-    @GetMapping("/{id}")
+    @GetMapping("/user/{id}")
     public Optional<UserDTO> getUserById(@PathVariable int id);
     @PostMapping("/new")
     public UserDTO saveNewUser(UserDTO userDTO);
