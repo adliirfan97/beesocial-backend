@@ -1,6 +1,6 @@
 package com.beesocial.authenticationserver;
 
-import com.beesocial.authenticationserver.DTOs.User;
+import com.beesocial.authenticationserver.DTOs.Role;
 import com.beesocial.authenticationserver.DTOs.UserRegistrationRequest;
 import com.beesocial.authenticationserver.controller.AuthController;
 import org.springframework.boot.ApplicationArguments;
@@ -17,13 +17,34 @@ public class DatabaseLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        UserRegistrationRequest user = new UserRegistrationRequest();
-        user.setFirstName("Harry");
-        user.setLastName("Potter");
-        user.setEmail("harry.potter@fdmgroup.com");
-        user.setPassword("password");
-        user.setPhoneNumber("87354721");
+        UserRegistrationRequest user1 = new UserRegistrationRequest();
+        user1.setFirstName("Harry");
+        user1.setLastName("Potter");
+        user1.setEmail("harry.potter@fdmgroup.com");
+        user1.setPassword("password");
+        user1.setPhoneNumber("87354721");
 
-        authController.register(user);
+        authController.register(user1);
+
+        UserRegistrationRequest user2 = new UserRegistrationRequest();
+        user2.setFirstName("Henry");
+        user2.setLastName("Cavill");
+        user2.setEmail("henrycavill@fdmgroup.com");
+        user2.setPassword("password");
+        user2.setPhoneNumber("90909090");
+        user2.setProfilePhoto("src\\pages\\HomePage\\Events\\images\\henrycavil.jpg");
+        user2.setRole(Role.HR);
+
+        authController.register(user2);
+
+        UserRegistrationRequest user3 = new UserRegistrationRequest();
+        user3.setFirstName("Emilia");
+        user3.setLastName("Clarke");
+        user3.setEmail("emiliaclarke@fdmgroup.com");
+        user3.setPassword("password");
+        user3.setPhoneNumber("91919191");
+        user3.setProfilePhoto("src\\pages\\HomePage\\Events\\images\\emiliaclarke.jpg");
+
+        authController.register(user3);
     }
 }
