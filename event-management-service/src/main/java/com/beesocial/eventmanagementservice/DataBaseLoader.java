@@ -23,7 +23,7 @@ public class DataBaseLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         UserDTO userDTO = new UserDTO(1, "Henry", "Cavill", "henrycavill@email.com", "90909090", "password", "src\\pages\\HomePage\\Events\\images\\henrycavil.jpg", "@HenBee123", ROLE.HR);
-        UserDTO userDTO2 = new UserDTO(2, "Henry", "Cavill", "henrycavill@email.com", "90909090", "password", "src\\pages\\HomePage\\Events\\images\\henrycavil.jpg", "@HenBee123", ROLE.EMPLOYEE);
+        UserDTO userDTO2 = new UserDTO(2, "Emilia", "Clarke", "emiliaclarke@email.com", "91919191", "password", "src\\pages\\HomePage\\Events\\images\\emiliaclarke.jpg", "@MotherOfBees", ROLE.EMPLOYEE);
         userManagementClient.saveNewUser(userDTO);
         userManagementClient.saveNewUser(userDTO2);
 
