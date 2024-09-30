@@ -27,7 +27,7 @@ public class UserManagementServiceController {
     }
 
     @PostMapping("/new")
-    public User saveNewUser(User user){
+    public User saveNewUser(@RequestBody User user){
         return userService.saveUser(user);
     }
 
