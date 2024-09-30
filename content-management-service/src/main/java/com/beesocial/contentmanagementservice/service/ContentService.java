@@ -2,6 +2,7 @@ package com.beesocial.contentmanagementservice.service;
 
 import com.beesocial.contentmanagementservice.dto.ContentRequest;
 import com.beesocial.contentmanagementservice.dto.ContentResponse;
+import com.beesocial.contentmanagementservice.dto.UserResponse;
 import com.beesocial.contentmanagementservice.feign.FirebaseClient;
 import com.beesocial.contentmanagementservice.model.Content;
 import com.beesocial.contentmanagementservice.repository.ContentRepository;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 
@@ -21,6 +23,7 @@ public class ContentService {
     private final FirebaseClient firebaseClient;
     private final ObjectMapper objectMapper;
     private final ContentRepository contentRepository;
+    private final WebClient.Builder webClientBuilder;
 
 //    @Autowired
 //    public ContentService(FirebaseClient firebaseClient,
@@ -43,10 +46,19 @@ public class ContentService {
 
         int userId = contentInDB.getUserId();
         // find user info in db by userId
+        UserResponse userResponse = webClientBuilder.build().get()
+                .uri(STR."http://user-management-service/\{userId}")
+                .retrieve()
+                .bodyToMono(UserResponse.class)
+                .block();
 
-        String firstName = "Haha";
-        String lastName = "Hehe";
-        String profilePhoto = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDKTpIhe2E8_CODdmBHLlBbEFy2VT86lCbfQ&s";
+        if (userResponse == null) {
+            throw new NoSuchElementException(STR."User with id: \{userId} could not be found.");
+        }
+
+        String firstName = userResponse.getFirstName();
+        String lastName = userResponse.getLastName();
+        String profilePhoto = userResponse.getProfilePhoto();
 
         return new ContentResponse(
                 contentInDB.getContentId(),
@@ -68,8 +80,8 @@ public class ContentService {
         Content content = new Content(
                 contentRequest.userId(),
                 contentRequest.text(),
-                contentRequest.image()
-                , contentRequest.repostId()
+                contentRequest.image(),
+                contentRequest.repostId()
         );
 
         contentRepository.save(content);
