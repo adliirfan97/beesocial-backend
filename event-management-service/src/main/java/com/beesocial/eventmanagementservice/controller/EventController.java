@@ -15,7 +15,7 @@ import java.util.Optional;
 public class EventController {
     @Autowired
     private EventService eventService;
-    @PostMapping
+    @PostMapping("/events")
     public ResponseEntity<?> saveEvent(@RequestBody Event event){
         return eventService.saveEvent(event);
     }
