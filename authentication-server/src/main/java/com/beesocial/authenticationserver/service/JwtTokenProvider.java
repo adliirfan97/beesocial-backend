@@ -4,19 +4,22 @@ import com.beesocial.authenticationserver.DTOs.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.spec.SecretKeySpec;
+import java.security.Key;
 import java.util.Date;
 
 @Service
 public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
-    private String jwtSecret;
+    private String jwtSecret; // A 256-bit key for HS256
 
     @Value("${jwt.expiration}")
     private int jwtExpiration;
@@ -28,11 +31,14 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration);
 
+        byte[] secretKeyBytes = jwtSecret.getBytes();
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKeyBytes, "HmacSHA256");
+
         return Jwts.builder()
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(secretKeySpec, SignatureAlgorithm.HS256)
                 .compact();
     }
 

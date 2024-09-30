@@ -2,28 +2,20 @@ package com.beesocial.usermanagementservice.controller;
 
 import com.beesocial.usermanagementservice.model.User;
 import com.beesocial.usermanagementservice.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 public class UserManagementServiceController {
+
     private final UserService userService;
 
-    @Autowired
     public UserManagementServiceController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "Testing";
-    }
-
-    @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable int id) {
-        return userService.getUserById(id);
+    @GetMapping("/user/{userId}")
+    public User getUserById(@PathVariable long userId) {
+        return userService.getUserById(userId);
     }
 
     @PostMapping("/new")
@@ -31,14 +23,14 @@ public class UserManagementServiceController {
         return userService.saveUser(user);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public void deleteExistingUserById(@PathVariable int id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/delete/{userId}")
+    public void deleteExistingUserById(@PathVariable long userId) {
+        userService.deleteUser(userId);
     }
 
-    @PutMapping("/update/{id}")
-    public User updateExistingUserById(@PathVariable int id){
-        return userService.updateUser(id);
+    @PutMapping("/update/{userId}")
+    public User updateExistingUserById(@PathVariable long userId) {
+        return userService.updateUser(userId);
     }
 
 }

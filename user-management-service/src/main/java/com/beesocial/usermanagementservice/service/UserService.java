@@ -2,7 +2,6 @@ package com.beesocial.usermanagementservice.service;
 
 import com.beesocial.usermanagementservice.model.User;
 import com.beesocial.usermanagementservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,32 +9,29 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
-    // save new user
+    // Get User by userId
+    public User getUserById(long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
+
+    // Save new User
     public User saveUser(User user){
         return userRepository.save(user);
     }
 
-    // get user by id
-    public Optional<User> getUserById(int userId) {
-        return userRepository.findById(userId);
-    }
-
-    // get all users
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
-    }
-
-    // delete user by id
-    public void deleteUser(int userId) {
+    // Delete User by userId
+    public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 
-    // update existing user by id
-    public User updateUser(int userId){
+    // Update existing User by userId
+    public User updateUser(long userId){
         Optional<User> userOptional = userRepository.findById(userId);
 
         // check if user exists

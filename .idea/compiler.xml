@@ -9,7 +9,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="event-management-service" />
         <module name="opportunity-management-service" />
-        <module name="firebase-storage-service" />
         <module name="authentication-server" />
         <module name="user-management-service" />
         <module name="api-gateway" />
@@ -18,8 +17,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="content-management-service" target="22" />
+      <module name="firebase-storage-service" target="22" />
       <module name="opportumity-management-service" target="22" />
+      <module name="shared-module" target="22" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

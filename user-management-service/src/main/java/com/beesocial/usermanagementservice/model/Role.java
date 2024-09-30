@@ -1,6 +1,6 @@
 package com.beesocial.usermanagementservice.model;
 
-public enum ROLE {
+public enum Role {
     EMPLOYEE,
     HR,
     MANAGER,

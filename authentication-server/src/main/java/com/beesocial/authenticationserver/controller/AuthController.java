@@ -1,10 +1,6 @@
 package com.beesocial.authenticationserver.controller;
 
-import com.beesocial.authenticationserver.DTOs.AuthRequest;
-import com.beesocial.authenticationserver.DTOs.AuthResponse;
-import com.beesocial.authenticationserver.DTOs.User;
-import com.beesocial.authenticationserver.DTOs.UserRegistrationRequest;
-import com.beesocial.authenticationserver.feign.FirebaseStorageClient;
+import com.beesocial.authenticationserver.DTOs.*;
 import com.beesocial.authenticationserver.service.JwtTokenProvider;
 import com.beesocial.authenticationserver.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -20,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
-
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -30,14 +24,12 @@ public class AuthController {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-    private final FirebaseStorageClient firebaseStorageClient;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder, FirebaseStorageClient firebaseStorageClient) {
+    public AuthController(AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, UserService userService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
-        this.firebaseStorageClient = firebaseStorageClient;
     }
 
     @PostMapping("/login")
@@ -59,19 +51,26 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody UserRegistrationRequest request) {
         System.out.println("Registering user: " + request.getEmail());
         try {
-            // TODO: Fix this shit
-//            if (userService.userExist(request.getEmail())) {
-//                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
-//            }
-                System.out.println(request);
-                // Encrypt Password
-                request.setPassword(passwordEncoder.encode(request.getPassword()));
-                request.setRole("USER");
+            if (userService.userExist(request.getEmail())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+            }
 
-                System.out.println(request);
-                System.out.println(userService.saveUser(request));
+            System.out.println(request);
+            // Create new User
+            User user = new User();
+            user.setFirstName(request.getFirstName());
+            user.setLastName(request.getLastName());
+            user.setEmail(request.getEmail());
+            user.setPhoneNumber(request.getPhoneNumber());
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+            user.setRole(request.getRole() == null ? Role.EMPLOYEE : request.getRole());
+            user.setProfilePhoto(request.getProfilePhoto() == null ? null : request.getProfilePhoto());
 
-                return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
+            // Save User
+            userService.saveUser(user);
+
+            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");
         }

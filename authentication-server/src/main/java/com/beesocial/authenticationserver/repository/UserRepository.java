@@ -1,6 +1,6 @@
-package com.beesocial.usermanagementservice.repository;
+package com.beesocial.authenticationserver.repository;
 
-import com.beesocial.usermanagementservice.model.User;
+import com.beesocial.authenticationserver.DTOs.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findById(Long userId);
-
+    Optional<User> findByEmail(String email);
 }
