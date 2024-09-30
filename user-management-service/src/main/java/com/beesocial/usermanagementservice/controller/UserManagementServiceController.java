@@ -17,4 +17,20 @@ public class UserManagementServiceController {
     public User getUserById(@PathVariable long userId) {
         return userService.getUserById(userId);
     }
+
+    @PostMapping("/new")
+    public User saveNewUser(@RequestBody User user){
+        return userService.saveUser(user);
+    }
+
+    @DeleteMapping("/delete/{userId}")
+    public void deleteExistingUserById(@PathVariable int userId) {
+        userService.deleteUser(userId);
+    }
+
+    @PutMapping("/update/{userId}")
+    public User updateExistingUserById(@PathVariable int userId) {
+        return userService.updateUser(userId);
+    }
+
 }
