@@ -26,12 +26,12 @@ public class UserService {
     }
 
     // Delete User by userId
-    public void deleteUser(int userId) {
+    public void deleteUser(long userId) {
         userRepository.deleteById(userId);
     }
 
     // Update existing User by userId
-    public User updateUser(int userId){
+    public User updateUser(long userId){
         Optional<User> userOptional = userRepository.findById(userId);
 
         // check if user exists

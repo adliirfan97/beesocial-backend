@@ -24,12 +24,12 @@ public class UserManagementServiceController {
     }
 
     @DeleteMapping("/delete/{userId}")
-    public void deleteExistingUserById(@PathVariable int userId) {
+    public void deleteExistingUserById(@PathVariable long userId) {
         userService.deleteUser(userId);
     }
 
     @PutMapping("/update/{userId}")
-    public User updateExistingUserById(@PathVariable int userId) {
+    public User updateExistingUserById(@PathVariable long userId) {
         return userService.updateUser(userId);
     }
 

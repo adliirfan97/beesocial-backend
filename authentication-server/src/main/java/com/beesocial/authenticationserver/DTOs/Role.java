@@ -1,8 +1,8 @@
 package com.beesocial.authenticationserver.DTOs;
 
 public enum Role {
-    USER,
-    ADMIN,
+    EMPLOYEE,
     HR,
-    MODERATOR
+    MANAGER,
+    MODERATOR,
 }
