@@ -1,38 +1,31 @@
 package com.beesocial.authenticationserver.service;
 
 import com.beesocial.authenticationserver.DTOs.User;
-import com.beesocial.authenticationserver.feign.FirebaseStorageClient;
+import com.beesocial.authenticationserver.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class UserService implements UserDetailsService {
-    private final FirebaseStorageClient firebaseStorageClient;
+    private final UserRepository userRepository;
 
-    public UserService(FirebaseStorageClient firebaseStorageClient) {
-        this.firebaseStorageClient = firebaseStorageClient;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = firebaseStorageClient.getUserByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
-        return user;
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
     }
 
-    public <T> String saveUser(T user) {
-        return firebaseStorageClient.saveUser(user);
+    public void saveUser(User user) {
+        userRepository.save(user);
     }
 
     public boolean userExist(String email) {
-        User user = firebaseStorageClient.getUserByEmail(email);
-        System.out.println(user);
-        return user != null;
+        return userRepository.findByEmail(email).isPresent();
     }
 }

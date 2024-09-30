@@ -13,7 +13,14 @@
         <option value="$PROJECT_DIR$/firebase-storage-service/pom.xml" />
         <option value="$PROJECT_DIR$/opportumity-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/opportunity-management-service/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-module/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/firebase-storage-service/pom.xml" />
+        <option value="$PROJECT_DIR$/shared-module/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
