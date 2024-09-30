@@ -1,6 +1,8 @@
 package com.beesocial.contentmanagementservice.controller;
 
 import com.beesocial.contentmanagementservice.dto.ContentRequest;
+import com.beesocial.contentmanagementservice.dto.ContentResponse;
+import com.beesocial.contentmanagementservice.model.Content;
 import com.beesocial.contentmanagementservice.service.ContentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,9 @@ import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/content")
@@ -32,20 +37,26 @@ public class ContentManagementServiceController {
     }
 
     @PostMapping("/createContent")
-    public ResponseEntity<String> createContent(@RequestBody @Valid ContentRequest contentRequest) {
-        String response = contentService.createContent(contentRequest);
+    public ResponseEntity<Content> createContent(@RequestBody @Valid ContentRequest contentRequest) {
+        Content response = contentService.createContent(contentRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/getContent/{contentId}")
+    public ResponseEntity<ContentResponse>getContentById(@PathVariable UUID contentId) {
+        ContentResponse contentResponse = contentService.getContentById(contentId);
+        return ResponseEntity.ok(contentResponse);
     }
 
     @GetMapping("/getAllContent")
-    public ResponseEntity<String>getAll() {
-        String response = contentService.getAll();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<Content>>getAllContent() {
+        List<Content> listOfContent = contentService.getAllContent();
+        return ResponseEntity.ok(listOfContent);
     }
 
-    @PutMapping()
-    public ResponseEntity<Void> updateContent(@RequestBody @Valid ContentRequest contentRequest) {
-        //TODO: Edit Content to Database
-        return null;
-    }
+//    @PutMapping()
+//    public ResponseEntity<Void> updateContent(@RequestBody @Valid ContentRequest contentRequest) {
+//        //TODO: Edit Content to Database
+//        return null;
+//    }
 }

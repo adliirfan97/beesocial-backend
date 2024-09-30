@@ -2,6 +2,11 @@ package com.beesocial.contentmanagementservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Data
@@ -11,24 +16,23 @@ import lombok.*;
 @Setter
 public class Content {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Content_generator")
-    @SequenceGenerator(name = "Content_generator", sequenceName = "Content_seq", allocationSize = 1)
-    private int contentId;
-    @ManyToOne
+    @Column(columnDefinition = "VARCHAR(36)")
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private UUID contentId;
     @JoinColumn(name = "FK_userId")
-    private String userId;
+    private int userId;
     private String text;
     private String image;
-    private long timeStamp;
-    @ManyToOne
+    private LocalDateTime timeStamp;
     @JoinColumn(name = "FK_repostId")
-    private int repostId;
+    private UUID repostId;
 
-    public Content( String  userId, String text, String image, long timestamp, int repostId) {
+    public Content( int userId, String text, String image, UUID repostId) {
+        this.contentId = UUID.randomUUID();
         this.userId = userId;
         this.text = text;
         this.image = image;
-        this.timeStamp = timestamp;
+        this.timeStamp = LocalDateTime.now();
         this.repostId = repostId;
     }
 
