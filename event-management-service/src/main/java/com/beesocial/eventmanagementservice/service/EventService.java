@@ -142,6 +142,14 @@ public class EventService {
         return ResponseEntity.ok(eventList);
     }
 
+    public ResponseEntity<?> getuserById(int id){
+        Optional<UserDTO> userDTOOptional = userManagementClient.getUserById(id);
+        if(userDTOOptional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(userDTOOptional.get());
+    }
+
 //
 //        public ResponseEntity<Object> saveEvent(Event event){
 //        String text = event.getText();
