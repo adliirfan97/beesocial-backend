@@ -1,21 +1,20 @@
 package com.beesocial.usermanagementservice.controller;
 
-import com.beesocial.usermanagementservice.feign.FirebaseStorageClient;
+import com.beesocial.usermanagementservice.model.User;
+import com.beesocial.usermanagementservice.service.UserService;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 public class UserManagementServiceController {
 
-    private final FirebaseStorageClient firebaseStorageClient;
+    private final UserService userService;
 
-    public UserManagementServiceController(FirebaseStorageClient firebaseStorageClient) {
-        this.firebaseStorageClient = firebaseStorageClient;
+    public UserManagementServiceController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/getDocument")
-    public Map<String, Object> getDocument(@RequestParam String collectionName, @RequestParam String documentId) {
-        return firebaseStorageClient.getDocument(collectionName, documentId);
+    @GetMapping("/user/{userId}")
+    public User getUserById(@PathVariable long userId) {
+        return userService.getUserById(userId);
     }
 }
