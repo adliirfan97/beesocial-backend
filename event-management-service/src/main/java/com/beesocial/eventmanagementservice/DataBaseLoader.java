@@ -22,12 +22,12 @@ public class DataBaseLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        UserDTO userDTO = new UserDTO(1, "John", "Doe", "johndoe@email.com", "90909090", "password", "profileImage.png", ROLE.HR);
-        UserDTO userDTO2 = new UserDTO(2, "John", "Doe", "johndoe@email.com", "90909090", "password", "profileImage.png", ROLE.EMPLOYEE);
+        UserDTO userDTO = new UserDTO(1, "John", "Doe", "johndoe@email.com", "90909090", "password", "profileImage.png", "@JohnDoe", ROLE.HR);
+        UserDTO userDTO2 = new UserDTO(2, "John", "Doe", "johndoe@email.com", "90909090", "password", "profileImage.png", "@JohnDOe", ROLE.EMPLOYEE);
         userManagementClient.saveNewUser(userDTO);
         userManagementClient.saveNewUser(userDTO2);
 
-        Event event = new Event(1, "Event happening on the 32/09/2024", "image/path/here.png");
+        Event event = new Event(1, "Event happening on the 32/09/2024", "src\\pages\\HomePage\\Events\\images\\event1.png");
         Event event2 = new Event(1, "Event happening on the 33/09/2024", null);
         eventRepository.save(event);
         eventRepository.save(event2);
