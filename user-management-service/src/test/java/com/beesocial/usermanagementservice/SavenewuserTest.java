@@ -31,7 +31,7 @@ class SavenewuserTest {
     // Test: Saving a valid user should return the saved user object
     @Test
     public void test_save_valid_user() {
-        User validUser = new User("John", "Doe", "john.doe@example.com", "1234567890", "password123", "profilePhoto.jpg", "@JohnDoe", Role.EMPLOYEE);
+        User validUser = new User("John", "Doe", "john.doe@example.com", "1234567890", "password123", "profilePhoto.jpg", Role.EMPLOYEE);
         when(userService.saveUser(validUser)).thenReturn(validUser);
 
         User result = controller.saveNewUser(validUser);
@@ -44,7 +44,7 @@ class SavenewuserTest {
     // Test: Saving a user with missing required fields should throw an exception
     @Test
     public void test_save_user_missing_fields() {
-        User invalidUser = new User("", "", "john.doe@example.com", "1234567890", "password123", "profilePhoto.jpg", "@JohnDoe", Role.EMPLOYEE);
+        User invalidUser = new User("", "", "john.doe@example.com", "1234567890", "password123", "profilePhoto.jpg", Role.EMPLOYEE);
         when(userService.saveUser(invalidUser)).thenThrow(new IllegalArgumentException("Missing required fields"));
 
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -58,7 +58,7 @@ class SavenewuserTest {
     // Test: Saving a user with all required fields populated should return the user object
     @Test
     public void test_save_user_with_all_required_fields() {
-        User validUser = new User("John", "Doe", "johndoe@example.com", "123456789", "password123", "profile.jpg", "@JohnDoe", Role.EMPLOYEE);
+        User validUser = new User("John", "Doe", "johndoe@example.com", "123456789", "password123", "profile.jpg", Role.EMPLOYEE);
         when(userService.saveUser(validUser)).thenReturn(validUser);
 
         User result = controller.saveNewUser(validUser);
@@ -78,7 +78,7 @@ class SavenewuserTest {
     // Test: Saving a user with a valid email format should return the saved user object
     @Test
     public void test_save_user_with_valid_email_format() {
-        User validUser = new User("Jane", "Smith", "janesmith@example.com", "987654321", "pass123", "image.jpg", "@JohnDoe", Role.HR);
+        User validUser = new User("Jane", "Smith", "janesmith@example.com", "987654321", "pass123", "image.jpg", Role.HR);
         when(userService.saveUser(validUser)).thenReturn(validUser);
 
         User result = controller.saveNewUser(validUser);
