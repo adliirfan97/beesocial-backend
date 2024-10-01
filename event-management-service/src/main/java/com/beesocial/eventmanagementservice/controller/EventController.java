@@ -31,7 +31,7 @@ public class EventController {
     public ResponseEntity<?> getAllEvents(){
         return eventService.getAllEvents();
     }
-    @GetMapping("user/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserById(@PathVariable int id){
         return eventService.getuserById(id);
     }
