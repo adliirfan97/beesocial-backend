@@ -21,22 +21,10 @@ import java.util.*;
 @Transactional
 public class ContentService {
 
-    private final FirebaseClient firebaseClient;
-    private final ObjectMapper objectMapper;
     private final ContentRepository contentRepository;
-    private final WebClient.Builder webClientBuilder;
     private final UserManagementClient userManagementClient;
 
-//    @Autowired
-//    public ContentService(FirebaseClient firebaseClient,
-//                          ObjectMapper objectMapper,
-//                          ContentRepository contentRepository) {
-//        this.firebaseClient = firebaseClient;
-//        this.objectMapper = objectMapper;
-//        this.contentRepository = contentRepository;
-//    }
-
-    public ContentResponse getContentById(UUID contentId) {
+    public Content getContentById(UUID contentId) {
 
         Optional<Content> contentOptional = contentRepository.findById(contentId);
 
@@ -57,14 +45,15 @@ public class ContentService {
         String lastName = userResponseOptional.get().getLastName();
         String profilePhoto = userResponseOptional.get().getProfilePhoto();
 
-        return new ContentResponse(
-                contentInDB.getContentId(),
-                contentInDB.getUserId(), firstName, lastName, profilePhoto,
-                contentInDB.getText(),
-                contentInDB.getImage(),
-                contentInDB.getTimeStamp(),
-                contentInDB.getRepostId()
-                );
+//        return new ContentResponse(
+//                contentInDB.getContentId(),
+//                contentInDB.getUserId(), firstName, lastName, profilePhoto,
+//                contentInDB.getText(),
+//                contentInDB.getImage(),
+//                contentInDB.getTimeStamp(),
+//                contentInDB.getRepostedContent().getContentId()
+//                );
+        return contentInDB;
     }
 
     public List<Content> getAllContent() {
@@ -74,21 +63,45 @@ public class ContentService {
 
     public List<Content> getAllContentFromUser(int userId) {
 
-        List<Content> listOfContent = contentRepository.findAllByUserId(userId);
-
-//        return contentRepository.findBy(userId);
-
-        return listOfContent;
+        return contentRepository.findAllByUserId(userId);
     }
 
     public Content createContent(ContentRequest contentRequest) {
 
+        // find user info in db by userId
+        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentRequest.userId());
+
+        if (userResponseOptional.isEmpty()) {
+            throw new NoSuchElementException(STR."User with id: \{contentRequest.userId()} could not be found.");
+        }
+
+        String firstName = userResponseOptional.get().getFirstName();
+        String lastName = userResponseOptional.get().getLastName();
+        String profilePhoto = userResponseOptional.get().getProfilePhoto();
+
+
         Content content = new Content(
-                contentRequest.userId(),
                 contentRequest.text(),
                 contentRequest.image(),
-                contentRequest.repostId()
+                null,
+                contentRequest.userId(),
+                firstName,
+                lastName,
+                profilePhoto
+
         );
+
+        if (contentRequest.repostId() == null) {
+            content.setRepostedContent(null);
+        } else {
+            Optional<Content> repostedContentOptional = contentRepository.findById(contentRequest.repostId());
+
+            if (repostedContentOptional.isEmpty()) {
+                throw new NoSuchElementException(STR."Content with id: \{contentRequest.repostId()} could not be found.");
+            }
+
+            content.setRepostedContent(repostedContentOptional.get());
+        }
 
         contentRepository.save(content);
 

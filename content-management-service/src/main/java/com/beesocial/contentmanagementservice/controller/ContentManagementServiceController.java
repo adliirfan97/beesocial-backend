@@ -43,8 +43,8 @@ public class ContentManagementServiceController {
     }
 
     @GetMapping("/getContent/{contentId}")
-    public ResponseEntity<ContentResponse>getContentById(@PathVariable UUID contentId) {
-        ContentResponse contentResponse = contentService.getContentById(contentId);
+    public ResponseEntity<Content>getContentById(@PathVariable UUID contentId) {
+        Content contentResponse = contentService.getContentById(contentId);
         return ResponseEntity.ok(contentResponse);
     }
 

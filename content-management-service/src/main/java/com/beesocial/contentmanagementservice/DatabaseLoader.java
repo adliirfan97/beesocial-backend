@@ -19,10 +19,13 @@ public class DatabaseLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         Content content1 = new Content(
-                1,
                 "hehe",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyfY8XFqWAcMopn2U-IdjW7XZj76E0qeIwUA&s"
-                , null
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyfY8XFqWAcMopn2U-IdjW7XZj76E0qeIwUA&s",
+                null,
+                1,
+                "Harry",
+                "Potter",
+                null
         );
 
         contentRepository.save(content1);

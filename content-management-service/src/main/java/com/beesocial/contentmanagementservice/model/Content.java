@@ -19,21 +19,35 @@ public class Content {
     @Column(columnDefinition = "VARCHAR(36)")
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private UUID contentId;
-    @JoinColumn(name = "FK_userId")
-    private int userId;
     private String text;
     private String image;
     private LocalDateTime timeStamp;
+    @ManyToOne
     @JoinColumn(name = "FK_repostId")
-    private UUID repostId;
+    private Content repostedContent;
+    @JoinColumn(name = "FK_userId")
+    private int userId;
+    private String firstName;
+    private String lastName;
+    private String profilePhoto;
 
-    public Content( int userId, String text, String image, UUID repostId) {
+
+    public Content(String text,
+                   String image,
+                   Content repostedContent,
+                   int userId,
+                   String firstName,
+                   String lastName,
+                   String profilePhoto) {
         this.contentId = UUID.randomUUID();
-        this.userId = userId;
         this.text = text;
         this.image = image;
         this.timeStamp = LocalDateTime.now();
-        this.repostId = repostId;
+        this.repostedContent = repostedContent;
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.profilePhoto = profilePhoto;
     }
 
 }
