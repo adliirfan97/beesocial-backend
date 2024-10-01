@@ -4,6 +4,7 @@ import com.beesocial.contentmanagementservice.dto.ContentRequest;
 import com.beesocial.contentmanagementservice.dto.ContentResponse;
 import com.beesocial.contentmanagementservice.dto.UserResponse;
 import com.beesocial.contentmanagementservice.feign.FirebaseClient;
+import com.beesocial.contentmanagementservice.feign.UserManagementClient;
 import com.beesocial.contentmanagementservice.model.Content;
 import com.beesocial.contentmanagementservice.repository.ContentRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ public class ContentService {
     private final ObjectMapper objectMapper;
     private final ContentRepository contentRepository;
     private final WebClient.Builder webClientBuilder;
+    private final UserManagementClient userManagementClient;
 
 //    @Autowired
 //    public ContentService(FirebaseClient firebaseClient,
@@ -46,19 +48,21 @@ public class ContentService {
 
         int userId = contentInDB.getUserId();
         // find user info in db by userId
-        UserResponse userResponse = webClientBuilder.build().get()
-                .uri(STR."http://user-management-service/\{userId}")
-                .retrieve()
-                .bodyToMono(UserResponse.class)
-                .block();
+//        UserResponse userResponse = webClientBuilder.build().get()
+//                .uri(STR."http://user-management-service/user/\{userId}")
+//                .retrieve()
+//                .bodyToMono(UserResponse.class)
+//                .block();
 
-        if (userResponse == null) {
+        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(userId);
+
+        if (userResponseOptional.isEmpty()) {
             throw new NoSuchElementException(STR."User with id: \{userId} could not be found.");
         }
 
-        String firstName = userResponse.getFirstName();
-        String lastName = userResponse.getLastName();
-        String profilePhoto = userResponse.getProfilePhoto();
+        String firstName = userResponseOptional.get().getFirstName();
+        String lastName = userResponseOptional.get().getLastName();
+        String profilePhoto = userResponseOptional.get().getProfilePhoto();
 
         return new ContentResponse(
                 contentInDB.getContentId(),
