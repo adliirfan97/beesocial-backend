@@ -21,7 +21,7 @@ public class DataBaseLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        Event event = new Event(1, "Event happening on the 32/09/2024", "src\\pages\\HomePage\\Events\\images\\event1.png");
+        Event event = new Event(1, "Event happening on the 32/09/2024", "event-management-service/src/main/resources/static/images/event1.png");
         Event event2 = new Event(1, "Event happening on the 33/09/2024", null);
         eventRepository.save(event);
         eventRepository.save(event2);
