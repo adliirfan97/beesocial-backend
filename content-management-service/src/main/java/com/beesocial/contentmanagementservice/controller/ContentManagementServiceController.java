@@ -54,6 +54,19 @@ public class ContentManagementServiceController {
         return ResponseEntity.ok(listOfContent);
     }
 
+    @GetMapping("/getAllContentFromUser/{userId}")
+    public ResponseEntity<List<Content>> getAllContentFromUser(@PathVariable int userId) {
+        List<Content> listOfContent = contentService.getAllContentFromUser(userId);
+        return ResponseEntity.ok(listOfContent);
+    }
+
+    @DeleteMapping("/deleteContent/{contentId}")
+    public ResponseEntity<String> deleteContent(@PathVariable UUID contentId) {
+        contentService.deleteContent(contentId);
+
+        return ResponseEntity.ok("Content deleted successfully");
+    }
+
 //    @PutMapping()
 //    public ResponseEntity<Void> updateContent(@RequestBody @Valid ContentRequest contentRequest) {
 //        //TODO: Edit Content to Database

@@ -46,18 +46,11 @@ public class ContentService {
 
         Content contentInDB = contentOptional.get();
 
-        int userId = contentInDB.getUserId();
         // find user info in db by userId
-//        UserResponse userResponse = webClientBuilder.build().get()
-//                .uri(STR."http://user-management-service/user/\{userId}")
-//                .retrieve()
-//                .bodyToMono(UserResponse.class)
-//                .block();
-
-        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(userId);
+        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentInDB.getUserId());
 
         if (userResponseOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."User with id: \{userId} could not be found.");
+            throw new NoSuchElementException(STR."User with id: \{contentInDB.getUserId()} could not be found.");
         }
 
         String firstName = userResponseOptional.get().getFirstName();
@@ -66,7 +59,7 @@ public class ContentService {
 
         return new ContentResponse(
                 contentInDB.getContentId(),
-                userId, firstName, lastName, profilePhoto,
+                contentInDB.getUserId(), firstName, lastName, profilePhoto,
                 contentInDB.getText(),
                 contentInDB.getImage(),
                 contentInDB.getTimeStamp(),
@@ -77,6 +70,15 @@ public class ContentService {
     public List<Content> getAllContent() {
 
         return contentRepository.findAll();
+    }
+
+    public List<Content> getAllContentFromUser(int userId) {
+
+        List<Content> listOfContent = contentRepository.findAllByUserId(userId);
+
+//        return contentRepository.findBy(userId);
+
+        return listOfContent;
     }
 
     public Content createContent(ContentRequest contentRequest) {
@@ -93,4 +95,15 @@ public class ContentService {
         return content;
     }
 
+    public void deleteContent(UUID contentId) {
+
+        Optional<Content> contentOptional = contentRepository.findById(contentId);
+
+        if (contentOptional.isEmpty()) {
+            throw new NoSuchElementException(STR."Content with id: \{contentId} could not be found.");
+        }
+
+        contentRepository.delete(contentOptional.get());
+
+    }
 }
