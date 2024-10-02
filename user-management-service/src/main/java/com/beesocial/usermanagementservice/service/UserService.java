@@ -4,7 +4,6 @@ import com.beesocial.usermanagementservice.model.User;
 import com.beesocial.usermanagementservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +17,11 @@ public class UserService {
     // Get User by userId
     public User getUserById(long userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    // Get User by email
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     // Save new User
@@ -41,4 +45,5 @@ public class UserService {
         }
         return null;
     }
+
 }
