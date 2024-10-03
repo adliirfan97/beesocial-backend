@@ -18,6 +18,11 @@ public class UserManagementServiceController {
         return userService.getUserById(userId);
     }
 
+    @GetMapping("/user")
+    public User getUserByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email);
+    }
+
     @PostMapping("/new")
     public User saveNewUser(@RequestBody User user){
         return userService.saveUser(user);

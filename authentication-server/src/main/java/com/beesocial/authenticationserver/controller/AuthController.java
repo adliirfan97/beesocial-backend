@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest request) {
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
@@ -41,21 +41,24 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             String token = jwtTokenProvider.generateToken(authentication);
-            return ResponseEntity.ok(new AuthResponse(token));
+
+            LoginResponse successResponse = new LoginResponse(HttpStatus.OK.value(), "Login successful", token);
+            return ResponseEntity.ok(successResponse);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            LoginResponse errorResponse = new LoginResponse(HttpStatus.UNAUTHORIZED.value(), "Invalid credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody UserRegistrationRequest request) {
+    public ResponseEntity<RegisterResponse> register(@RequestBody RegisterRequest request) {
         System.out.println("Registering user: " + request.getEmail());
         try {
             if (userService.userExist(request.getEmail())) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already exists");
+                RegisterResponse conflictResponse = new RegisterResponse(HttpStatus.CONFLICT.value(), "Email already exists");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(conflictResponse);
             }
 
-            System.out.println(request);
             // Create new User
             User user = new User();
             user.setFirstName(request.getFirstName());
@@ -69,10 +72,12 @@ public class AuthController {
             // Save User
             userService.saveUser(user);
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully.");
+            RegisterResponse successResponse  = new RegisterResponse(HttpStatus.CREATED.value(), "User registered successfully");
+            return ResponseEntity.status(HttpStatus.CREATED).body(successResponse );
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Registration failed.");
+            RegisterResponse errorResponse   = new RegisterResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Registration failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
         }
     }
 }
