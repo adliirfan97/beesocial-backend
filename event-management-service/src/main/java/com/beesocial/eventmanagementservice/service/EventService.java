@@ -157,6 +157,13 @@ public class EventService {
         }
         return ResponseEntity.ok(userDTOOptional.get());
     }
+    public ResponseEntity<?> getAppliedById(int eventId){
+        return ResponseEntity.ok(eventApplicantRepository.findAll().stream()
+                .filter(eventApplicant -> eventApplicant.getEventId()==eventId)
+                .map(eventApplicant -> getuserById(eventApplicant.getUserId()).getBody())
+                .toList()
+        );
+    }
 
 //
 //        public ResponseEntity<Object> saveEvent(Event event){

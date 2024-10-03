@@ -73,4 +73,9 @@ public class EventController {
     public ResponseEntity<?> getUserById(@PathVariable int id){
         return eventService.getuserById(id);
     }
+
+    @GetMapping("/applied/{eventId}")
+    public ResponseEntity<?> getApplicantsById(@PathVariable int eventId){
+        return eventService.getAppliedById(eventId);
+    }
 }
