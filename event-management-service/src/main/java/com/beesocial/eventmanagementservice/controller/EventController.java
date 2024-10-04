@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 public class EventController {
     @Autowired
