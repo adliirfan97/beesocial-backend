@@ -69,10 +69,10 @@ public class ContentService {
     public Content createContent(ContentRequest contentRequest) {
 
         // find user info in db by userId
-        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentRequest.userId());
+        Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentRequest.getUserId());
 
         if (userResponseOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."User with id: \{contentRequest.userId()} could not be found.");
+            throw new NoSuchElementException(STR."User with id: \{contentRequest.getUserId()} could not be found.");
         }
 
         String firstName = userResponseOptional.get().getFirstName();
@@ -81,23 +81,23 @@ public class ContentService {
 
 
         Content content = new Content(
-                contentRequest.text(),
-                contentRequest.image(),
+                contentRequest.getText(),
+                contentRequest.getImage(),
                 null,
-                contentRequest.userId(),
+                contentRequest.getUserId(),
                 firstName,
                 lastName,
                 profilePhoto
 
         );
 
-        if (contentRequest.repostId() == null) {
+        if (contentRequest.getRepostId() == null) {
             content.setRepostedContent(null);
         } else {
-            Optional<Content> repostedContentOptional = contentRepository.findById(contentRequest.repostId());
+            Optional<Content> repostedContentOptional = contentRepository.findById(contentRequest.getRepostId());
 
             if (repostedContentOptional.isEmpty()) {
-                throw new NoSuchElementException(STR."Content with id: \{contentRequest.repostId()} could not be found.");
+                throw new NoSuchElementException(STR."Content with id: \{contentRequest.getRepostId()} could not be found.");
             }
 
             content.setRepostedContent(repostedContentOptional.get());

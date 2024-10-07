@@ -1,18 +1,35 @@
 package com.beesocial.contentmanagementservice.dto;
 
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record ContentRequest (
+//@AllArgsConstructor
+//@Getter
+//@Setter
+//public record ContentRequest (
+//        @NotNull(message = "User required")
+//        int userId,
+////        @NotNull(message = "Message cannot be empty")
+//        String text,
+////        @NotNull(message = "Minimum of one image is required")
+//        String image,
+//        UUID repostId
+//) {
+//
+//
+//}
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class ContentRequest {
+
         @NotNull(message = "User required")
-        int userId,
-//        @NotNull(message = "Message cannot be empty")
-        String text,
-//        @NotNull(message = "Minimum of one image is required")
-        String image,
-        UUID repostId
-) {
-
-
+        private int userId;
+        private String text;
+        private String image;
+        private UUID repostId;
 }

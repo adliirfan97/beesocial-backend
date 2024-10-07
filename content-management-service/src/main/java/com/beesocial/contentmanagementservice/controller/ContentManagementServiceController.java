@@ -4,13 +4,18 @@ import com.beesocial.contentmanagementservice.dto.ContentRequest;
 import com.beesocial.contentmanagementservice.dto.ContentResponse;
 import com.beesocial.contentmanagementservice.model.Content;
 import com.beesocial.contentmanagementservice.service.ContentService;
+import com.beesocial.contentmanagementservice.service.ImageService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaDiscoveryClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,14 +24,17 @@ import java.util.UUID;
 public class ContentManagementServiceController {
 
     private final ContentService contentService;
+    private final ImageService imageService;
     private final EurekaDiscoveryClient discoveryClient;
     private final WebClient webClient;
 
     @Autowired
     public ContentManagementServiceController(ContentService contentService,
+                                              ImageService imageService,
                                               EurekaDiscoveryClient discoveryClient,
                                               WebClient webClient) {
         this.contentService = contentService;
+        this.imageService = imageService;
         this.discoveryClient = discoveryClient;
         this.webClient = webClient;
     }
@@ -37,9 +45,32 @@ public class ContentManagementServiceController {
     }
 
     @PostMapping("/createContent")
-    public ResponseEntity<Content> createContent(@RequestBody @Valid ContentRequest contentRequest) {
-        Content response = contentService.createContent(contentRequest);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<?> createContent(@RequestPart("content") String contentJson,
+                                                 @RequestPart(value = "image", required = false) MultipartFile image) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ContentRequest contentRequest;
+
+        try {
+            contentRequest = objectMapper.readValue(contentJson, ContentRequest.class);
+        } catch (JsonProcessingException e) {
+            System.out.println(STR."Error parsing content JSON: \{e.getMessage()}");
+            return ResponseEntity.badRequest().body("Invalid content data");
+        }
+
+        if (image != null && !image.isEmpty()) {
+            String pathToStoreImage = "content-management-service/src/main/resources/static/images";
+            try {
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                contentRequest.setImage(pathToStoreImage + "/" + uniqueFileName);
+                imageService.saveImageToStorage(pathToStoreImage, image, uniqueFileName);
+            } catch (IOException e) {
+                System.out.println(STR."Error saving image: \{e.getMessage()}");
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+
+        return ResponseEntity.ok().body(contentService.createContent(contentRequest));
     }
 
     @GetMapping("/getContent/{contentId}")
