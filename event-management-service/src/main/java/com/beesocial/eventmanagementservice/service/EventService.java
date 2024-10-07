@@ -164,6 +164,9 @@ public class EventService {
                 .toList()
         );
     }
+    public void deleteById(int id){
+        eventRepository.deleteById(id);
+    }
 
 //
 //        public ResponseEntity<Object> saveEvent(Event event){
