@@ -3,7 +3,7 @@ package com.beesocial.authenticationserver.DTOs;
 import lombok.Data;
 
 @Data
-public class UserRegistrationRequest {
+public class RegisterRequest {
     private String firstName;
     private String lastName;
     private String email;

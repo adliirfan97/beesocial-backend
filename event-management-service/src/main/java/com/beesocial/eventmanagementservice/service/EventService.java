@@ -7,12 +7,12 @@ import com.beesocial.eventmanagementservice.model.ROLE;
 import com.beesocial.eventmanagementservice.model.UserDTO;
 import com.beesocial.eventmanagementservice.repository.EventApplicantRepository;
 import com.beesocial.eventmanagementservice.repository.EventRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -139,7 +139,15 @@ public class EventService {
 
     public ResponseEntity<?> getAllEvents(){
         List<Event> eventList = eventRepository.findAll();
-        return ResponseEntity.ok(eventList);
+        return ResponseEntity.ok(eventList.stream()
+                .sorted(new Comparator<Event>() {
+                    @Override
+                    public int compare(Event o1, Event o2) {
+                        return o2.getTimestamp().compareTo(o1.getTimestamp());
+                    }
+                })
+                .toList()
+        );
     }
 
     public ResponseEntity<?> getuserById(int id){
@@ -148,6 +156,13 @@ public class EventService {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(userDTOOptional.get());
+    }
+    public ResponseEntity<?> getAppliedById(int eventId){
+        return ResponseEntity.ok(eventApplicantRepository.findAll().stream()
+                .filter(eventApplicant -> eventApplicant.getEventId()==eventId)
+                .map(eventApplicant -> getuserById(eventApplicant.getUserId()).getBody())
+                .toList()
+        );
     }
 
 //
