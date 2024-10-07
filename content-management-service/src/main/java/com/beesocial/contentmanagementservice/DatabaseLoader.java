@@ -19,8 +19,8 @@ public class DatabaseLoader implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
 
         Content content1 = new Content(
-                "hehe",
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyfY8XFqWAcMopn2U-IdjW7XZj76E0qeIwUA&s",
+                "Code review",
+                "content-management-service/src/main/resources/static/images/merge_conflict.jpg",
                 null,
                 1,
                 "Harry",
