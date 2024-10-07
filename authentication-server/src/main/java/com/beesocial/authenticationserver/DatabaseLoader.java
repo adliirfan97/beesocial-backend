@@ -44,6 +44,7 @@ public class DatabaseLoader implements ApplicationRunner {
         user3.setPassword("password");
         user3.setPhoneNumber("91919191");
         user3.setProfilePhoto("src\\pages\\HomePage\\Events\\images\\emiliaclarke.jpg");
+        user3.setRole(Role.HR);
 
         authController.register(user3);
     }
