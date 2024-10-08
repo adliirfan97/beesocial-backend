@@ -4,6 +4,8 @@ import com.beesocial.usermanagementservice.model.User;
 import com.beesocial.usermanagementservice.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 public class UserManagementServiceController {
 
@@ -21,6 +23,11 @@ public class UserManagementServiceController {
     @GetMapping("/user")
     public User getUserByEmail(@RequestParam String email) {
         return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("get-all")
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
     }
 
     @PostMapping("/new")
