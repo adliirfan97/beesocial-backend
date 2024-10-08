@@ -78,4 +78,8 @@ public class EventController {
     public ResponseEntity<?> getApplicantsById(@PathVariable int eventId){
         return eventService.getAppliedById(eventId);
     }
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable int id){
+        eventService.deleteById(id);
+    }
 }
