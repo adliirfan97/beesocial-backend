@@ -25,7 +25,7 @@ public class UserManagementServiceController {
         return userService.getUserByEmail(email);
     }
 
-    @GetMapping("get-all")
+    @GetMapping("/getAll")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
