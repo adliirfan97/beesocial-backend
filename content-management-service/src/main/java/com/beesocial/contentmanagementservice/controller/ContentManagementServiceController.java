@@ -45,8 +45,7 @@ public class ContentManagementServiceController {
     }
 
     @PostMapping("/createContent")
-    public ResponseEntity<?> createContent(@RequestPart("content") String contentJson,
-                                                 @RequestPart(value = "image", required = false) MultipartFile image) {
+    public ResponseEntity<?> createContent(@RequestPart("content") String contentJson) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         ContentRequest contentRequest;
@@ -56,18 +55,6 @@ public class ContentManagementServiceController {
         } catch (JsonProcessingException e) {
             System.out.println(STR."Error parsing content JSON: \{e.getMessage()}");
             return ResponseEntity.badRequest().body("Invalid content data");
-        }
-
-        if (image != null && !image.isEmpty()) {
-            String pathToStoreImage = "content-management-service/src/main/resources/static/images";
-            try {
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-                contentRequest.setImage(pathToStoreImage + "/" + uniqueFileName);
-                imageService.saveImageToStorage(pathToStoreImage, image, uniqueFileName);
-            } catch (IOException e) {
-                System.out.println(STR."Error saving image: \{e.getMessage()}");
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
         }
 
         return ResponseEntity.ok().body(contentService.createContent(contentRequest));

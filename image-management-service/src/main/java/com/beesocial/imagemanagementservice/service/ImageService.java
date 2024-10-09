@@ -10,7 +10,7 @@ import java.nio.file.StandardCopyOption;
 
 @Service
 public class ImageService {
-    public String saveImageToStorage(String uploadDirectory, MultipartFile imageFile, String uniqueFileName) throws IOException {
+    public void saveImageToStorage(String uploadDirectory, MultipartFile imageFile, String uniqueFileName) throws IOException {
         Path uploadPath = Path.of(uploadDirectory);
         Path filePath = uploadPath.resolve(uniqueFileName);
 
@@ -19,8 +19,6 @@ public class ImageService {
         }
 
         Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        return uploadDirectory + "/" + uniqueFileName;
     }
 
     // To view an image
