@@ -14,6 +14,7 @@
         <option value="$PROJECT_DIR$/opportumity-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/opportunity-management-service/pom.xml" />
         <option value="$PROJECT_DIR$/shared-module/pom.xml" />
+        <option value="$PROJECT_DIR$/image-management-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
@@ -22,7 +23,6 @@
         <option value="$PROJECT_DIR$/shared-module/pom.xml" />
       </set>
     </option>
-    <option name="workspaceImportForciblyTurnedOn" value="true" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_X" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
