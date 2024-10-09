@@ -4,12 +4,14 @@ import com.beesocial.eventmanagementservice.model.Event;
 import com.beesocial.eventmanagementservice.service.EventService;
 import com.beesocial.eventmanagementservice.service.ImageService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -49,7 +51,32 @@ public class EventController {
         return eventService.saveEvent(event);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> editEventById(@PathVariable int id, @RequestBody Event updatedEvent){
+    public ResponseEntity<?> editEventById(@PathVariable int id,
+                                           @RequestPart("event") String eventJson,
+                                           @RequestPart(value = "image", required = false) MultipartFile image) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        Event updatedEvent;
+        try {
+            updatedEvent = objectMapper.readValue(eventJson, Event.class);
+        } catch (JsonProcessingException e) {
+            System.out.println("Error parsing event JSON: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Invalid event data");
+        }
+
+        // Check if the image already exists
+        if (image != null && !image.isEmpty()) {
+            String path = "event-management-service/src/main/resources/static/images";
+            try {
+                String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
+                updatedEvent.setImage(path + "/" + uniqueFileName);
+                imageService.saveImageToStorage(path, image, uniqueFileName);
+            } catch (IOException e) {
+                System.out.println("Error saving image: " + e.getMessage());
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
+        }
+
+        // Update the event in the database
         return eventService.editEventById(id, updatedEvent);
     }
     @PostMapping("/addApplicant")
