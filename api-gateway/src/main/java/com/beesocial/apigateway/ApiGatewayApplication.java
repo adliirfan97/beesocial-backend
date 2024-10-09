@@ -32,6 +32,10 @@ public class ApiGatewayApplication {
 						.path("/event-management-service/**")
 						.filters(f -> f.stripPrefix(1))
 						.uri("lb://event-management-service"))
+				.route("image-management-service", r -> r
+						.path("/image-management-service/**")
+						.filters(f -> f.stripPrefix(1))
+						.uri("lb://image-management-service"))
 				.build();
 	}
 }
