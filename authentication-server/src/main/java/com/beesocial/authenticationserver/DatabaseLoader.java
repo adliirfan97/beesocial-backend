@@ -1,51 +1,72 @@
 package com.beesocial.authenticationserver;
 
 import com.beesocial.authenticationserver.DTOs.Role;
-import com.beesocial.authenticationserver.DTOs.RegisterRequest;
+import com.beesocial.authenticationserver.DTOs.User;
 import com.beesocial.authenticationserver.controller.AuthController;
+import com.beesocial.authenticationserver.service.UserService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DatabaseLoader implements ApplicationRunner {
-    private final AuthController authController;
+    private final UserService userService;
+    private final PasswordEncoder passwordEncoder;
 
-    public DatabaseLoader(AuthController authController) {
-        this.authController = authController;
+    public DatabaseLoader(AuthController authController, UserService userService, PasswordEncoder passwordEncoder) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        RegisterRequest user1 = new RegisterRequest();
-        user1.setFirstName("Harry");
-        user1.setLastName("Potter");
-        user1.setEmail("harry.potter@fdmgroup.com");
-        user1.setPassword("password");
-        user1.setPhoneNumber("87354721");
+        createUser(
+                "Harry",
+                "Potter",
+                "harry.potter@fdmgroup.com",
+                "password",
+                "99999999",
+                null,
+                Role.EMPLOYEE
+                );
 
-        authController.register(user1);
+        createUser(
+                "Henry",
+                "Cavill",
+                "henrycavill@fdmgroup.com",
+                "password",
+                "90909090",
+                "src\\pages\\HomePage\\Events\\images\\henrycavil.jpg",
+                Role.HR
+        );
 
-        RegisterRequest user2 = new RegisterRequest();
-        user2.setFirstName("Henry");
-        user2.setLastName("Cavill");
-        user2.setEmail("henrycavill@fdmgroup.com");
-        user2.setPassword("password");
-        user2.setPhoneNumber("90909090");
-        user2.setProfilePhoto("src\\pages\\HomePage\\Events\\images\\henrycavil.jpg");
-        user2.setRole(Role.HR);
+        createUser(
+                "Emilia",
+                "Clarke",
+                "emiliaclarke@fdmgroup.com",
+                "password",
+                "91919191",
+                "src\\pages\\HomePage\\Events\\images\\emiliaclarke.jpg",
+                Role.EMPLOYEE
+        );
+    }
 
-        authController.register(user2);
+    private void createUser(String firstName, String lastName, String email, String password, String phoneNumber, String profilePhoto, Role role) {
+        if (!userService.userExist(email)) {
+            User user = new User();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setPassword(passwordEncoder.encode(password));
+            user.setPhoneNumber(phoneNumber);
+            user.setProfilePhoto(profilePhoto != null ? profilePhoto : "");
+            user.setRole(role);
 
-        RegisterRequest user3 = new RegisterRequest();
-        user3.setFirstName("Emilia");
-        user3.setLastName("Clarke");
-        user3.setEmail("emiliaclarke@fdmgroup.com");
-        user3.setPassword("password");
-        user3.setPhoneNumber("91919191");
-        user3.setProfilePhoto("src\\pages\\HomePage\\Events\\images\\emiliaclarke.jpg");
-        user3.setRole(Role.HR);
-
-        authController.register(user3);
+            userService.saveUser(user);
+            System.out.println("User " + firstName + " " + lastName + " created");
+        } else {
+            System.out.println("User " + firstName + " " + lastName + " already exists");
+        }
     }
 }

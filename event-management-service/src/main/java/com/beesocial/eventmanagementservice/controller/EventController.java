@@ -22,9 +22,7 @@ public class EventController {
     @Autowired
     private ImageService imageService;
     @PostMapping("/events")
-    public ResponseEntity<?> saveEvent(
-            @RequestPart("event") String eventJson,
-            @RequestPart(value = "image", required = false) MultipartFile image) {
+    public ResponseEntity<?> saveEvent(@RequestPart("event") String eventJson) {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Event event;
@@ -36,24 +34,10 @@ public class EventController {
             return ResponseEntity.badRequest().body("Invalid event data");
         }
 
-        if (image != null && !image.isEmpty()) {
-            String path = "event-management-service/src/main/resources/static/images";
-            try {
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-                event.setImage(path + "/" + uniqueFileName);
-                imageService.saveImageToStorage(path, image, uniqueFileName);
-            } catch (IOException e) {
-                System.out.println("Error saving image: " + e.getMessage());
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
-        }
-
         return eventService.saveEvent(event);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> editEventById(@PathVariable int id,
-                                           @RequestPart("event") String eventJson,
-                                           @RequestPart(value = "image", required = false) MultipartFile image) {
+    public ResponseEntity<?> editEventById(@PathVariable int id, @RequestPart("event") String eventJson) {
         ObjectMapper objectMapper = new ObjectMapper();
         Event updatedEvent;
         try {
@@ -62,20 +46,6 @@ public class EventController {
             System.out.println("Error parsing event JSON: " + e.getMessage());
             return ResponseEntity.badRequest().body("Invalid event data");
         }
-
-        // Check if the image already exists
-        if (image != null && !image.isEmpty()) {
-            String path = "event-management-service/src/main/resources/static/images";
-            try {
-                String uniqueFileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
-                updatedEvent.setImage(path + "/" + uniqueFileName);
-                imageService.saveImageToStorage(path, image, uniqueFileName);
-            } catch (IOException e) {
-                System.out.println("Error saving image: " + e.getMessage());
-                return ResponseEntity.badRequest().body(e.getMessage());
-            }
-        }
-
         // Update the event in the database
         return eventService.editEventById(id, updatedEvent);
     }

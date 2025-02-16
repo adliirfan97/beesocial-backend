@@ -1,18 +1,13 @@
 package com.beesocial.contentmanagementservice.service;
 
 import com.beesocial.contentmanagementservice.dto.ContentRequest;
-import com.beesocial.contentmanagementservice.dto.ContentResponse;
 import com.beesocial.contentmanagementservice.dto.UserResponse;
-import com.beesocial.contentmanagementservice.feign.FirebaseClient;
 import com.beesocial.contentmanagementservice.feign.UserManagementClient;
 import com.beesocial.contentmanagementservice.model.Content;
 import com.beesocial.contentmanagementservice.repository.ContentRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 
@@ -29,7 +24,7 @@ public class ContentService {
         Optional<Content> contentOptional = contentRepository.findById(contentId);
 
         if (contentOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."Content with id: \{contentId} could not be found.");
+            throw new NoSuchElementException("Content with id: " + contentId + " could not be found.");
         }
 
         Content contentInDB = contentOptional.get();
@@ -38,7 +33,7 @@ public class ContentService {
         Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentInDB.getUserId());
 
         if (userResponseOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."User with id: \{contentInDB.getUserId()} could not be found.");
+            throw new NoSuchElementException("User with id: " + contentInDB.getUserId() + " could not be found.");
         }
 
         String firstName = userResponseOptional.get().getFirstName();
@@ -72,7 +67,7 @@ public class ContentService {
         Optional<UserResponse> userResponseOptional = userManagementClient.getUserById(contentRequest.getUserId());
 
         if (userResponseOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."User with id: \{contentRequest.getUserId()} could not be found.");
+            throw new NoSuchElementException("User with id: " + contentRequest.getUserId()+ " could not be found.");
         }
 
         String firstName = userResponseOptional.get().getFirstName();
@@ -97,7 +92,7 @@ public class ContentService {
             Optional<Content> repostedContentOptional = contentRepository.findById(contentRequest.getRepostId());
 
             if (repostedContentOptional.isEmpty()) {
-                throw new NoSuchElementException(STR."Content with id: \{contentRequest.getRepostId()} could not be found.");
+                throw new NoSuchElementException("Content with id: " + contentRequest.getRepostId() + " could not be found.");
             }
 
             content.setRepostedContent(repostedContentOptional.get());
@@ -113,7 +108,7 @@ public class ContentService {
         Optional<Content> contentOptional = contentRepository.findById(contentId);
 
         if (contentOptional.isEmpty()) {
-            throw new NoSuchElementException(STR."Content with id: \{contentId} could not be found.");
+            throw new NoSuchElementException("Content with id: " + contentId + " could not be found.");
         }
 
         contentRepository.delete(contentOptional.get());

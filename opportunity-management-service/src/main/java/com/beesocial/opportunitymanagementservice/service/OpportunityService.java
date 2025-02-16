@@ -5,6 +5,7 @@ import com.beesocial.opportunitymanagementservice.model.Opportunity;
 import com.beesocial.opportunitymanagementservice.repository.OpportunityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -54,6 +55,24 @@ public class OpportunityService {
                 .orElseThrow(() -> new RuntimeException("Opportunity not found"));
 
         opportunityRepository.delete(opportunity);
+    }
+
+    @Transactional
+    public void applyOpportunity(int opportunityId, Integer applicantId) {
+        Opportunity opportunity = opportunityRepository.findById(opportunityId)
+                .orElseThrow(() -> new RuntimeException("Opportunity not found"));
+
+        System.out.println("Before adding: " + opportunity.getApplicantIds());
+        if (applicantId == null) {
+            System.out.println("Applicant ID is null, cannot add to list.");
+        } else {
+            opportunity.addApplicant(applicantId);
+        }
+        System.out.println("After adding: " + opportunity.getApplicantIds());
+        for (Integer ap : opportunity.getApplicantIds()) {
+            System.out.println(ap);
+        }
+        opportunityRepository.save(opportunity);
     }
 }
 

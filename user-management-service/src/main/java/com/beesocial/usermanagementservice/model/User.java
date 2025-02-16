@@ -1,5 +1,6 @@
 package com.beesocial.usermanagementservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ public class User {
     private String lastName;
     private String email;
     private String phoneNumber;
+    @JsonIgnore
     private String password;
     private Role role;
     private String profilePhoto;
