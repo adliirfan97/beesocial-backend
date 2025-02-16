@@ -68,4 +68,14 @@ public class OpportunityManagementServiceController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Opportunity not found");
         }
     }
+
+    @PutMapping("/applyOpportunity/{opportunityId}/{applicantId}")
+    public ResponseEntity<Object> applyOpportunity(@PathVariable int opportunityId, @PathVariable Integer applicantId) {
+        try {
+            opportunityService.applyOpportunity(opportunityId, applicantId);
+            return ResponseEntity.ok("Applied for Opportunity successfully");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to apply for Opportunity");
+        }
+    }
 }
