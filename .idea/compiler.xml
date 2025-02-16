@@ -18,7 +18,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="firebase-storage-service" target="22" />
+      <module name="firebase-storage-service" target="19" />
       <module name="opportumity-management-service" target="22" />
       <module name="shared-module" target="22" />
     </bytecodeTargetLevel>

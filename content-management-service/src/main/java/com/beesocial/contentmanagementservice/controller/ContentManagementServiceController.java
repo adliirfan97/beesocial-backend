@@ -53,7 +53,7 @@ public class ContentManagementServiceController {
         try {
             contentRequest = objectMapper.readValue(contentJson, ContentRequest.class);
         } catch (JsonProcessingException e) {
-            System.out.println(STR."Error parsing content JSON: \{e.getMessage()}");
+            System.out.println("Error parsing content JSON: " + e.getMessage());
             return ResponseEntity.badRequest().body("Invalid content data");
         }
 
